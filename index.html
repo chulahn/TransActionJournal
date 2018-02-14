@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Chul Ahn</title>
+    <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"> -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        
+    </style>
+</head>
+<body ng-app="app" ng-controller="dataController">
+    
+    Name:<input name="xName" ng-model="name">
+    Price:<input type="number" name="xPrice" ng-model="price">
+    Date:<input type="date" name="xDate" ng-model="date">
+
+    <span class="btn btn-success" ng-click="addItem()">Add Transaction</span>
+
+    <div ng-repeat="x in transactions">
+
+        <div class="col-md-2">{{x.name}}</div>
+        <div class="col-md-2">{{x.date}}</div>
+        <div class="col-md-8">{{x}}</div>
+    </div>
+
+</body>
+
+<!-- <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script> -->
+<script src="js/jquery-3.2.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/angular.js"></script>
+<script src="js/controller.js"></script>
+
+<script>
+    $(document).ready(function() {
+
+    })
+</script>
+
+</html>
