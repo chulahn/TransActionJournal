@@ -9,7 +9,17 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <style>
-        
+        .date-title {
+            border:1px solid green;
+            height: 100%;
+            position: inherit;
+            overflow: auto;
+        }
+        .date-title div {
+            border: 1px solid red;
+            position: inherit;
+            height: 100%;
+        }
     </style>
 </head>
 <body ng-app="app" ng-controller="dataController">
@@ -20,7 +30,7 @@
 
     <span class="btn btn-success" ng-click="addItem()">Add Transaction</span>
 
-    <div ng-repeat="x in transactions">
+    <div class="date-title" ng-repeat="x in transactions">
 
         <div class="col-md-2">{{x.name}}</div>
         <div class="col-md-2">{{x.date}}</div>
