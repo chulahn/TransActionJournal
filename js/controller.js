@@ -142,6 +142,7 @@
               //http://jimhoskins.com/2012/12/17/angularjs-and-apply.html
               $scope.$apply(function() {
                 $scope.transactions = data;
+                $scope.convertData();
               });
 
               localStorage.setItem(
