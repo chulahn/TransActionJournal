@@ -42,33 +42,21 @@
                 </tr>
             </thead>
 
-            <!-- <tbody>
-                ng-repeat
-                <tr trans_id="{{x._id.$oid}}" ng-repeat="x in transactions track by $index">
-                    <th scope="row">{{displayDate(x.date)}}</th>
-                    <td>{{x.name}}</td>
-                    <td>{{x.price}}</td>
-                    <td>{{x.sold}}</td>
-                    <td id="{{x._id.$oid}}">{{populateTags(x)}}</td>
-                    <td>
-                        <span ng-click="deleteItem(x)">X {{x._id.$oid}}</span>
-                    </td>
-                </tr>
-            </tbody> -->
             <tbody ng-repeat="day in days  | orderBy: 'date' ">
                 <tr class="date-header">
                     <th>
                         {{day.monthYear}}
                     </th>
                     <th>{{day.transactions.length}}
-                        <span class="pull-right">${{getTotalForList(day.transactions)/day.transactions.length}}</span>
+                        <span class="pull-right">${{getTotalForList(day.transactions)/day.transactions.length | number: 2}}</span>
                     </th>
-                    <th>${{getTotalForList(day.transactions)}}</th>
+                    <th>${{getTotalForList(day.transactions) | number: 2}}</th>
                     <th></th>
                     <th></th>
                     <th></th>
 
                 </tr>
+                <!-- Transactions -->
                 <tr ng-repeat="trans in day.transactions | orderBy: 'date'" transId={{trans._id}}>
                     <td>{{trans.date.toDate().toLocaleString()}}</td>
                     <td>{{trans.name}}</td>
@@ -82,9 +70,13 @@
                 <tr class="date-footer">
                     <td></td>
                     <td class="date-footer">{{day.transactions.length}}
-                        <span class="pull-right">${{getTotalForList(day.transactions)/day.transactions.length}}</span>
+                        <span class="pull-right">${{getTotalForList(day.transactions)/day.transactions.length | number: 2}}</span>
                     </td>
-                    <td>${{getTotalForList(day.transactions)}}</td>
+                    <td>${{getTotalForList(day.transactions) | number: 2}}
+                        <span class="pull-right">
+                            {{getTotal()}}
+                        </span>
+                    </td>
                     <td></td>
                     <td></td>
                     <td></td>
@@ -111,42 +103,40 @@
             </tbody>
         </table>
 
-        <section>
-            Hype transactions
+        <section id="bottomSection">
+            Statistics
 
         </section>
     </div>
-    <div id="testContainer">
-        <section>
+    <footer id="addTransactionContainer">
+        <!-- <section>
             <a id="testEditable" data-type="text" data-title="Test Editable.  Enter name">Job Change</a>
-        </section>
-        <section id="addTransactionContainer">
-            <div class="row">
-                <div class="col-xs-1">
-                    -
-                </div>
-                <div class="col-xs-1">
-                    <input id="date" ng-model="date" type="date">
-                </div>
-                <div class="col-xs-2">
-                    <input id="name" ng-model="name" placeholder="Item Name">
-                </div>
-                <div class="col-xs-2">
-                    <input id="price" ng-model="price" placeholder="Item Price">
-                </div>
-                <div class="col-xs-1">
-                    <input id="sold" ng-model="sold" placeholder="Sold Price">
-                </div>
+        </section> -->
+        <table class="table table-condensed input-table">
+            <tbody>
+                <tr>
+                    <td class="col-xs-2">
+                        <input id="date" ng-model="date" type="date">
+                    </td>
+                    <td class="col-xs-2">
+                        <input id="name" ng-model="name" placeholder="Item Name">
+                    </td>
+                    <td class="col-xs-2">
+                        <input id="price" ng-model="price" placeholder="Item Price">
+                    </td>
+                    <td class="col-xs-1">
+                        <input id="sold" ng-model="sold" placeholder="Sold Price">
+                    </td>
 
-                <div class="col-xs-1">
-                    <button class="btn btn-success" ng-click="addItem()">Add+</button>
-                </div>
-                <div class="col-xs-1">
-                    <button class="btn btn-success" ng-click="getandSetTransactionsFromDatabase()">Get From Database</button>
-                </div>
-            </div>
-        </section>
-    </div>
+                    <td class="col-xs-1">
+                        <button class="btn btn-success" ng-click="addItem()">Add+</button>
+                    </td>
+                    <td class="col-xs-1">
+                        <button class="btn btn-success" ng-click="getandSetTransactionsFromDatabase()">Get From Database</button>
+                    </td>
+                </tr>
+            </tbody>
+    </footer>
 </body>
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
