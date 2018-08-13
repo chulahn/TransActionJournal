@@ -1,7 +1,10 @@
 #addTransactionContainer {
-    position: fixed;
-    background: #0891EC;
-    bottom: 0px;
-    width: 100%;
+  position: fixed;
+  background: #0891ec;
+  bottom: 0px;
+  width: 100%;
 }
 
+.date-header {
+  background: yellow;
+}
