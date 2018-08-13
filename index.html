@@ -57,16 +57,16 @@
             </tbody> -->
             <tbody ng-repeat="day in days  | orderBy: 'date' ">
                 <tr class="date-header">
-                    <th class="date-header">
+                    <th>
                         {{day.monthYear}}
                     </th>
-                    <th class="date-header">{{day.transactions.length}}
+                    <th>{{day.transactions.length}}
                         <span class="pull-right">${{getTotalForList(day.transactions)/day.transactions.length}}</span>
                     </th>
-                    <th class="date-header">${{getTotalForList(day.transactions)}}</th>
-                    <th class="date-header"></th>
-                    <th class="date-header"></th>
-                    <th class="date-header"></th>
+                    <th>${{getTotalForList(day.transactions)}}</th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
 
                 </tr>
                 <tr ng-repeat="trans in day.transactions | orderBy: 'date'" transId={{trans._id}}>
@@ -79,9 +79,9 @@
                         <span ng-click="deleteItem(trans)">X {{trans._id.$oid}}</span>
                     </td>
                 </tr>
-                <tr>
+                <tr class="date-footer">
                     <td></td>
-                    <td>{{day.transactions.length}}
+                    <td class="date-footer">{{day.transactions.length}}
                         <span class="pull-right">${{getTotalForList(day.transactions)/day.transactions.length}}</span>
                     </td>
                     <td>${{getTotalForList(day.transactions)}}</td>
@@ -92,14 +92,15 @@
             </tbody>
 
             <tbody id="overallSum">
-                <tr>
+                <tr class="final-footer">
                     <td>
-                        Date Place holder
+                        Grand Total:
                     </td>
-                    <td>{{transactions.length}} items</td>
+                    <td>{{transactions.length}} items
+                        <span class="pull-right">{{ (getTotal() / transactions.length) | number: 2 }}</span>
+                    </td>
                     <td>
                         <div class="col-xs-6">{{getTotal1("price")}}</div>
-                        <div class="col-xs-6">{{ (getTotal() / transactions.length) | number: 2 }}</div>
                     </td>
                     <td>{{getTotal1("sold")}} {{getFlipInvestment()}}
                         <span ng-class="(getProfit() > 0) ? 'profit' : 'loss'">{{getProfit()}}</span>

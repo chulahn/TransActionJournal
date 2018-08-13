@@ -5,6 +5,15 @@
   width: 100%;
 }
 
-.date-header {
+.date-header th {
   background: yellow;
+}
+
+.date-footer td {
+  background: green;
+}
+
+.final-footer td {
+  background: red;
+  color: white;
 }
