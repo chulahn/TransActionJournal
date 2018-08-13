@@ -58,10 +58,12 @@
             <tbody ng-repeat="day in days  | orderBy: 'date' ">
                 <tr class="date-header">
                     <th class="date-header">
-                        {{day.date|date}}
+                        {{day.monthYear}}
                     </th>
-                    <th class="date-header"></th>
-                    <th class="date-header"></th>
+                    <th class="date-header">{{day.transactions.length}}
+                        <span class="pull-right">${{getTotalForList(day.transactions)/day.transactions.length}}</span>
+                    </th>
+                    <th class="date-header">${{getTotalForList(day.transactions)}}</th>
                     <th class="date-header"></th>
                     <th class="date-header"></th>
                     <th class="date-header"></th>
@@ -70,7 +72,7 @@
                 <tr ng-repeat="trans in day.transactions | orderBy: 'date'" transId={{trans._id}}>
                     <td>{{trans.date.toDate().toLocaleString()}}</td>
                     <td>{{trans.name}}</td>
-                    <td>{{trans.price}}</td>
+                    <td>$ {{trans.price}}</td>
                     <td>{{trans.sold}}</td>
                     <td id="{{trans._id.$oid}}">{{populateTags(trans)}}</td>
                     <td>
@@ -80,7 +82,7 @@
                 <tr>
                     <td></td>
                     <td>{{day.transactions.length}}
-                        <span class="pull-right">${{getTotal2(day.transactions)/day.transactions.length}}</span>
+                        <span class="pull-right">${{getTotalForList(day.transactions)/day.transactions.length}}</span>
                     </td>
                     <td>${{getTotalForList(day.transactions)}}</td>
                     <td></td>
