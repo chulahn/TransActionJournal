@@ -51,6 +51,29 @@
           $scope.transactions = transactionLog;
         }
 
+        // Called after addingItem, or updatingItemTags.
+        // Get transactions from database, and set as $scope data.
+        $scope.getandSetTransactionsFromDatabase = function() {
+          console.log("getandSetTransactionsFromDatabase: calling AJAX");
+          $.ajax({
+            url:
+              "https://api.mlab.com/api/1/databases/eyecoin/collections/transactions?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws",
+            type: "GET",
+            contentType: "application/json"
+          }).done(function(data) {
+            $scope.$apply(function() {
+              $scope.transactions = data;
+              $scope.convertData();
+            });
+            console.log(
+              "getandSetTransactionsFromDatabase: finished AJAX call. $scope.transactions",
+              $scope.transactions,
+              "$scope.days",
+              $scope.days
+            );
+          });
+        };
+
         $scope.getandSetTransactionsFromDatabase();
 
         // Make a seprate array that each element is a Day with transactions
@@ -242,29 +265,6 @@
             alert("finished updateItemTags");
             console.log("updateItemTags: finished updateItemTags");
             $scope.getandSetTransactionsFromDatabase();
-          });
-        };
-
-        // Called after addingItem, or updatingItemTags.
-        // Get transactions from database, and set as $scope data.
-        $scope.getandSetTransactionsFromDatabase = function() {
-          console.log("getandSetTransactionsFromDatabase: calling AJAX");
-          $.ajax({
-            url:
-              "https://api.mlab.com/api/1/databases/eyecoin/collections/transactions?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws",
-            type: "GET",
-            contentType: "application/json"
-          }).done(function(data) {
-            $scope.$apply(function() {
-              $scope.transactions = data;
-              $scope.convertData();
-            });
-            console.log(
-              "getandSetTransactionsFromDatabase: finished AJAX call. $scope.transactions",
-              $scope.transactions,
-              "$scope.days",
-              $scope.days
-            );
           });
         };
 
