@@ -48,9 +48,9 @@
                         {{day.monthYear}}
                     </th>
                     <th>{{day.transactions.length}}
-                        <span class="pull-right">${{getTotalForList(day.transactions)/day.transactions.length | number: 2}}</span>
+                        <span class="pull-right">${{getTotalForMonthYear(day.transactions)/day.transactions.length | number: 2}}</span>
                     </th>
-                    <th>${{getTotalForList(day.transactions) | number: 2}}</th>
+                    <th>${{getTotalForMonthYear(day.transactions) | number: 2}}</th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -70,9 +70,9 @@
                 <tr class="date-footer">
                     <td></td>
                     <td class="date-footer">{{day.transactions.length}}
-                        <span class="pull-right">${{getTotalForList(day.transactions)/day.transactions.length | number: 2}}</span>
+                        <span class="pull-right">${{getTotalForMonthYear(day.transactions)/day.transactions.length | number: 2}}</span>
                     </td>
-                    <td>${{getTotalForList(day.transactions) | number: 2}}
+                    <td>${{getTotalForMonthYear(day.transactions) | number: 2}}
                         <span class="pull-right">
                             {{getTotal()}}
                         </span>
@@ -92,10 +92,13 @@
                         <span class="pull-right">{{ (getTotal() / transactions.length) | number: 2 }}</span>
                     </td>
                     <td>
-                        <div class="col-xs-6">{{getTotal1("price")}}</div>
+                        <div class="col-xs-6">$ {{getTotalForList("price")}}</div>
                     </td>
-                    <td>{{getTotal1("sold")}} {{getFlipInvestment()}}
-                        <span ng-class="(getProfit() > 0) ? 'profit' : 'loss'">{{getProfit()}}</span>
+                    <td>Sold: {{getTotalForList("sold")}}
+                        <br/> Cost: {{getFlipInvestment()}}
+                        <br/> Flip: {{getTotalForList("sold") - getFlipInvestment()}}
+                        <br/>
+                        <span ng-class="(getProfit() > 0) ? 'profit' : 'loss'">Profit: {{getProfit()}}</span>
                     </td>
                     <td id="testTag"></td>
                     <td>No delete</td>

@@ -53,8 +53,8 @@
 
         // Called after addingItem, or updatingItemTags.
         // Get transactions from database, and set as $scope data.
-        $scope.getandSetTransactionsFromDatabase = function() {
-          console.log("getandSetTransactionsFromDatabase: calling AJAX");
+        $scope.getDBTransactions = function() {
+          console.log("getDBTransactions: calling AJAX");
           $.ajax({
             url:
               "https://api.mlab.com/api/1/databases/eyecoin/collections/transactions?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws",
@@ -66,7 +66,7 @@
               $scope.convertData();
             });
             console.log(
-              "getandSetTransactionsFromDatabase: finished AJAX call. $scope.transactions",
+              "getDBTransactions: finished AJAX call. $scope.transactions",
               $scope.transactions,
               "$scope.days",
               $scope.days
@@ -74,7 +74,7 @@
           });
         };
 
-        $scope.getandSetTransactionsFromDatabase();
+        $scope.getDBTransactions();
 
         // Make a seprate array that each element is a Day with transactions
         $scope.convertData = function(data) {
@@ -130,7 +130,12 @@
           itemToAdd.price = $scope.price;
           itemToAdd.sold = $scope.sold;
 
-          itemToAdd.date = new Date($scope.date) || new Date();
+          if ($scope.date) {
+            itemToAdd.date = new Date($scope.date);
+          } else {
+            itemToAdd.date = new Date();
+          }
+          // console.log("itemToAdd.date", itemToAdd.date);
           itemToAdd.tags = ["hype"];
           // $scope.transactions.push(itemToAdd);
           console.log(
@@ -199,11 +204,9 @@
         // has onTagAdd, onTagRemove methods
         $scope.populateTags = function(transaction) {
           // {}.date , name, price , tags, _id
-          // $("tr[trans_id='59ee1d9ec2ef163e8f753e4f']")
 
           if (transaction) {
-            if (transaction._id) {
-            } else {
+            if (!transaction._id) {
               console.log("No Id", transaction, $scope.transactions);
             }
             var transID = transaction._id.$oid;
@@ -220,7 +223,7 @@
 
               onTagAdd: function(event, tag) {
                 console.log(
-                  "popuplateTags: onTagAdd: event, tag, this",
+                  "populateTags: onTagAdd: event, tag, this",
                   event,
                   tag,
                   this
@@ -248,7 +251,7 @@
 
         // Called when tag is added or removed
         $scope.updateItemTags = function(transaction, newTags) {
-          console.log("updateItemTags: ", transaction);
+          console.log("updateItemTags: ", transaction, newTags);
           var transID = transaction._id.$oid;
 
           var reqURL =
@@ -264,7 +267,7 @@
           }).done(function() {
             alert("finished updateItemTags");
             console.log("updateItemTags: finished updateItemTags");
-            $scope.getandSetTransactionsFromDatabase();
+            $scope.getDBTransactions();
           });
         };
 
@@ -287,7 +290,7 @@
             async: true,
             timeout: 0
           }).done(function() {
-            $scope.getandSetTransactionsFromDatabase();
+            $scope.getDBTransactions();
             alert("done delete");
             localStorage.setItem(
               "transactionLog",
@@ -301,7 +304,8 @@
           // console.log($scope.transactions);
         };
 
-        $scope.getTotalForList = function(transactions) {
+        // Gets sum for a MonthYear
+        $scope.getTotalForMonthYear = function(transactions) {
           var sum = 0;
           for (var i = 0; i < transactions.length; i++) {
             if (!isNaN(parseFloat(transactions[i].price)))
@@ -310,7 +314,8 @@
           return sum;
         };
 
-        $scope.getTotal1 = function(listName) {
+        // Get sum for all transactions with a listName
+        $scope.getTotalForList = function(listName) {
           var sum = 0;
           for (var i = 0; i < $scope.transactions.length; i++) {
             if (isNaN(parseFloat($scope.transactions[i][listName])) === false)
@@ -328,6 +333,7 @@
           return sum;
         };
 
+        // If Sold, its just Price
         $scope.getFlipInvestment = function() {
           var sum = 0;
           for (var i = 0; i < $scope.transactions.length; i++) {
@@ -341,7 +347,9 @@
         };
 
         $scope.getProfit = function() {
-          return $scope.getTotal1("sold") - $scope.getTotal1("price");
+          return (
+            $scope.getTotalForList("sold") - $scope.getTotalForList("price")
+          );
         };
       }
     ]);
