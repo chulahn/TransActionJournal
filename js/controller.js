@@ -157,7 +157,13 @@
             itemToAdd.date = new Date();
           }
           // console.log("itemToAdd.date", itemToAdd.date);
-          itemToAdd.tags = ["hype"];
+          if ($scope.tags) {
+            console.log("$scope.tags ", $scope.tags);
+            itemToAdd.tags = $scope.tags.split(",");
+          } else {
+            console.log("addItem: no tags, adding hype");
+            itemToAdd.tags = ["hype"];
+          }
           // $scope.transactions.push(itemToAdd);
           console.log(
             "addItem: itemToAdd , $scope.transactions",
@@ -295,10 +301,11 @@
         $scope.deleteItem = function(transaction) {
           console.log("deleteItem: ", transaction);
 
-          var transID = transaction._id.$oid;
           var indexToRemove = $scope.transactions.indexOf(transaction);
           console.log("deleteItem: indexToRemove:", indexToRemove);
           $scope.transactions.splice(indexToRemove, 1);
+
+          var transID = transaction._id.$oid;
 
           var reqURL =
             "https://api.mlab.com/api/1/databases/eyecoin/collections/transactions/" +
