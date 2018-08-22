@@ -123,15 +123,17 @@
           console.log("$scope.days: ", $scope.days);
         };
 
-        // Called when Adding an item.  Adds to Database.
-        $scope.addItem = function() {
-          var itemToAdd = {};
-          itemToAdd.name = $scope.name;
-          itemToAdd.price = $scope.price;
-          itemToAdd.sold = $scope.sold;
+        // Private method that creates object with properties from $scope.inputs
+        // {}.name , .price, .sold, .date, .tags
+        // Used in addItem/updateItem
+        function composeTransaction() {
+          var transaction = {};
+          transaction.name = $scope.name;
+          transaction.price = $scope.price;
+          transaction.sold = $scope.sold;
 
-          var itemDate;
           // Create itemDate from $scope inputs
+          var itemDate;
           if ($scope.date) {
             //Mon Aug 20 2018 00:00:00 GMT-0400 (Eastern Daylight Time) Object
             var itemDate = new Date($scope.date);
@@ -146,30 +148,36 @@
                 itemDate.setHours(hour);
                 itemDate.setMinutes(min);
               } else {
-                console.log("addItem: invalid dateTime");
+                console.log("composeTransaction: invalid dateTime");
               }
             } else {
-              console.log("addItem: no dateTime.  set to 12");
+              console.log("composeTransaction: no dateTime.  set to 12");
             }
-            console.log("addItem: itemDate ", itemDate);
-            itemToAdd.date = itemDate;
+            console.log("composeTransaction: itemDate ", itemDate);
+            transaction.date = itemDate;
           } else {
-            itemToAdd.date = new Date();
+            transaction.date = new Date();
           }
-          // console.log("itemToAdd.date", itemToAdd.date);
+
           if ($scope.tags) {
             console.log("$scope.tags ", $scope.tags);
-            itemToAdd.tags = $scope.tags.split(",");
+
+            if (typeof $scope.tags === "string") {
+              transaction.tags = $scope.tags.split(",");
+            }
           } else {
-            console.log("addItem: no tags, adding hype");
-            itemToAdd.tags = ["hype"];
+            console.log("composeTransaction: no tags, adding hype");
+            transaction.tags = ["hype"];
           }
-          // $scope.transactions.push(itemToAdd);
-          console.log(
-            "addItem: itemToAdd , $scope.transactions",
-            itemToAdd,
-            $scope.transactions
-          );
+
+          return transaction;
+        }
+
+        // Called when Adding an item.  Adds to Database.
+        $scope.addItem = function() {
+          var itemToAdd = {};
+          itemToAdd = composeTransaction();
+          console.log("addItem: itemToAdd ", itemToAdd);
 
           $.ajax({
             url:
@@ -202,13 +210,15 @@
           });
         };
 
-        $scope.updateItem = function(transaction) {
-          console.log("updateItem: ", transaction);
+        // Called after fields have been filled in.
+        $scope.updateItem = function() {
+          console.log("updateItem: $scope.transactionId", $scope.transactionId);
 
-          var b = "59e92c5abd966f5cb6d97386";
+          var transactionToUpdate = composeTransaction();
 
-          var transID = transaction._id.$oid;
+          var transID = $scope.transactionId;
 
+          //PUT /databases/{database}/collections/{collection}/{_id}
           var reqURL =
             "https://api.mlab.com/api/1/databases/eyecoin/collections/transactions/" +
             transID +
@@ -216,15 +226,54 @@
 
           $.ajax({
             url: reqURL,
-            data: JSON.stringify({ $set: { tags: ["succesful", "update"] } }),
+            data: JSON.stringify({ $set: transactionToUpdate }),
             type: "PUT",
             contentType: "application/json"
+          }).done(function() {
+            $.ajax({
+              url:
+                "https://api.mlab.com/api/1/databases/eyecoin/collections/transactions?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws",
+              type: "GET",
+              contentType: "application/json"
+            }).done(function(data) {
+              $scope.$apply(function() {
+                $scope.transactions = data;
+                $scope.convertData();
+              });
+              localStorage.setItem(
+                "transactionLog",
+                JSON.stringify($scope.transactions)
+              );
+              console.log(
+                "updateItem: Successfully set localStorage transactionLog"
+              );
+            });
           });
+        };
 
-          // $.ajax( { url: reqURL,
-          //           data: JSON.stringify(  { "$set" : { "tags" : ["succesful","update"] } } ),
-          //           type: "PUT",
-          //           contentType: "application/json" } );
+        // Depending on edit or delete mode
+        // Newly clicked item will be highlighted
+        // and have information filled so $scope.editTransaction() is ready to be called.
+        $scope.fillTransactionInfo = function(transaction, $event) {
+          // highlight row
+          $(".edit-selected").removeClass("edit-selected");
+          $($event.currentTarget)
+            .parent()
+            .find("td")
+            .addClass("edit-selected");
+
+          var date = new Date(transaction.date);
+          $scope.date = date;
+          $scope.dateTime = date.getHours() + ":" + date.getMinutes();
+
+          $scope.name = transaction.name;
+          $scope.price = transaction.price;
+          $scope.sold = transaction.sold;
+
+          $scope.tags = transaction.tags;
+
+          //fill hidden input
+          $scope.transactionId = transaction._id.$oid;
         };
 
         // Create Taggle Tags on browser.
@@ -235,6 +284,10 @@
           if (transaction) {
             if (!transaction._id) {
               console.log("No Id", transaction, $scope.transactions);
+            }
+            if (transaction._id === "undefined") {
+              console.log("transaction._id === undefined ", transaction);
+              return;
             }
             var transID = transaction._id.$oid;
 

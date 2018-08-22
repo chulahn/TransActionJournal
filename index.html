@@ -59,7 +59,7 @@
                 <!-- Transactions -->
                 <tr ng-repeat="trans in day.transactions | orderBy: 'date'" transId={{trans._id}}>
                     <td>{{trans.date.toDate().toLocaleString()}}</td>
-                    <td>{{trans.name}}</td>
+                    <td ng-click="fillTransactionInfo(trans, $event);">{{trans.name}}</td>
                     <td>$ {{trans.price}}</td>
                     <td>{{trans.sold}}</td>
                     <td id="{{trans._id.$oid}}">{{populateTags(trans)}}</td>
@@ -135,11 +135,16 @@
                         <input id="tags" ng-model="tags" placeholder="Tags">
                     </td>
                     <td class="col-xs-1">
-                        <button class="btn btn-success" ng-click="addItem()">Add+</button>
+                        <button ng-hide="editMode" class="btn btn-success" ng-click="addItem()">Add+</button>
+                        <button ng-hide="editMode" class="btn btn-success" ng-click="updateItem()">Update</button>
                     </td>
                     <td class="col-xs-1">
                         <button class="btn btn-success" ng-click="getandSetTransactionsFromDatabase()">Get From Database</button>
                     </td>
+                    <td>
+                        <input ng-model="transactionId" id="transactionId">
+                    </td>
+
                 </tr>
             </tbody>
     </footer>
