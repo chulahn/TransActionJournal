@@ -2,6 +2,13 @@
   width: 100%;
 }
 
+.profit {
+  background: green;
+}
+.loss {
+  background: red !important;
+}
+
 #addTransactionContainer {
   position: fixed;
   background: #0891ec;

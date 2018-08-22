@@ -177,6 +177,7 @@
         $scope.addItem = function() {
           var itemToAdd = {};
           itemToAdd = composeTransaction();
+          itemToAdd.created = new Date();
           console.log("addItem: itemToAdd ", itemToAdd);
 
           $.ajax({
@@ -215,6 +216,7 @@
           console.log("updateItem: $scope.transactionId", $scope.transactionId);
 
           var transactionToUpdate = composeTransaction();
+          transactionToUpdate.lastUpdated = new Date();
 
           var transID = $scope.transactionId;
 
@@ -286,7 +288,7 @@
               console.log("No Id", transaction, $scope.transactions);
             }
             if (transaction._id === "undefined") {
-              console.log("transaction._id === undefined ", transaction);
+              // console.log("transaction._id === undefined ", transaction);
               return;
             }
             var transID = transaction._id.$oid;
@@ -385,14 +387,22 @@
           // console.log($scope.transactions);
         };
 
-        // Gets sum for a MonthYear
-        $scope.getTotalForMonthYear = function(transactions) {
+        // Gets sum of a list for a MonthYear
+        $scope.getTotalForMonthYear = function(transactions, listName) {
           var sum = 0;
           for (var i = 0; i < transactions.length; i++) {
-            if (!isNaN(parseFloat(transactions[i].price)))
-              sum += parseFloat(transactions[i].price);
+            if (!isNaN(parseFloat(transactions[i][listName])))
+              sum += parseFloat(transactions[i][listName]);
           }
           return sum;
+        };
+
+        // Gets Net(sold-price) for a MonthYear
+        $scope.getNetForMonthYear = function(transactions) {
+          return (
+            $scope.getTotalForMonthYear(transactions, "sold") -
+            $scope.getTotalForMonthYear(transactions, "price")
+          );
         };
 
         // Get sum for all transactions with a listName

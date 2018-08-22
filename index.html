@@ -70,16 +70,21 @@
                 <tr class="date-footer">
                     <td></td>
                     <td class="date-footer">{{day.transactions.length}}
-                        <span class="pull-right">${{getTotalForMonthYear(day.transactions)/day.transactions.length | number: 2}}</span>
+                        <span class="pull-right">${{getTotalForMonthYear(day.transactions, "price")/day.transactions.length | number: 2}}</span>
                     </td>
-                    <td>${{getTotalForMonthYear(day.transactions) | number: 2}}
+                    <td>${{getTotalForMonthYear(day.transactions, "price") | number: 2}}
+
+                    </td>
+                    <td>${{getTotalForMonthYear(day.transactions, "sold") | number: 2}}</td>
+
+
+                    <td ng-class="( (getNetForMonthYear(day.transactions) > 0) ? 'profit' : 'loss')"> ${{getNetForMonthYear(day.transactions) | number: 2}}
+                    </td>
+                    <td>
                         <span class="pull-right">
-                            {{getTotal() | number: 2}}
+                            Total: {{getTotal() | number: 2}}
                         </span>
                     </td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
                 </tr>
             </tbody>
 
