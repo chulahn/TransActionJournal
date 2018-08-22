@@ -130,8 +130,29 @@
           itemToAdd.price = $scope.price;
           itemToAdd.sold = $scope.sold;
 
+          var itemDate;
+          // Create itemDate from $scope inputs
           if ($scope.date) {
-            itemToAdd.date = new Date($scope.date);
+            //Mon Aug 20 2018 00:00:00 GMT-0400 (Eastern Daylight Time) Object
+            var itemDate = new Date($scope.date);
+
+            if ($scope.dateTime) {
+              console.log("$scope.dateTime ", $scope.dateTime);
+              if ($scope.dateTime.indexOf(":") !== -1) {
+                var time = $scope.dateTime.split(":");
+                var hour = time[0];
+                var min = time[1];
+
+                itemDate.setHours(hour);
+                itemDate.setMinutes(min);
+              } else {
+                console.log("addItem: invalid dateTime");
+              }
+            } else {
+              console.log("addItem: no dateTime.  set to 12");
+            }
+            console.log("addItem: itemDate ", itemDate);
+            itemToAdd.date = itemDate;
           } else {
             itemToAdd.date = new Date();
           }
