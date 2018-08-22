@@ -426,15 +426,19 @@
 
         // If Sold, its just Price
         $scope.getFlipInvestment = function() {
-          var sum = 0;
+          var flip = {};
+          flip.sum = 0;
+          flip.count = 0;
           for (var i = 0; i < $scope.transactions.length; i++) {
             if (
               isNaN(parseFloat($scope.transactions[i].price)) === false &&
               $scope.transactions[i].sold > 0
-            )
-              sum += parseFloat($scope.transactions[i].price);
+            ) {
+              flip.sum += parseFloat($scope.transactions[i].price);
+              flip.count++;
+            }
           }
-          return sum;
+          return flip;
         };
 
         $scope.getProfit = function() {

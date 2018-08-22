@@ -48,9 +48,9 @@
                         {{day.monthYear}}
                     </th>
                     <th>{{day.transactions.length}}
-                        <span class="pull-right">${{getTotalForMonthYear(day.transactions)/day.transactions.length | number: 2}}</span>
+                        <span class="pull-right">${{getTotalForMonthYear(day.transactions, "price")/day.transactions.length | number: 2}}</span>
                     </th>
-                    <th>${{getTotalForMonthYear(day.transactions) | number: 2}}</th>
+                    <th>${{getTotalForMonthYear(day.transactions, "price") | number: 2}}</th>
                     <th></th>
                     <th></th>
                     <th></th>
@@ -72,15 +72,18 @@
                     <td class="date-footer">{{day.transactions.length}}
                         <span class="pull-right">${{getTotalForMonthYear(day.transactions, "price")/day.transactions.length | number: 2}}</span>
                     </td>
-                    <td>${{getTotalForMonthYear(day.transactions, "price") | number: 2}}
+                    <td>Total: ${{getTotalForMonthYear(day.transactions, "price") | number: 2}}
 
                     </td>
-                    <td>${{getTotalForMonthYear(day.transactions, "sold") | number: 2}}</td>
+                    <td>Sold: ${{getTotalForMonthYear(day.transactions, "sold") | number: 2}}</td>
 
 
-                    <td ng-class="( (getNetForMonthYear(day.transactions) > 0) ? 'profit' : 'loss')"> ${{getNetForMonthYear(day.transactions) | number: 2}}
+                    <td ng-class="( (getNetForMonthYear(day.transactions) > 0) ? 'profit' : 'loss')">Net: ${{getNetForMonthYear(day.transactions) | number: 2}}
                     </td>
                     <td>
+                        ${{getTotalForMonthYear(day.transactions, "price") | number: 0}} {{getTotalForMonthYear(day.transactions, "price") / getTotal()
+                        * 100 | number: 0}}%
+
                         <span class="pull-right">
                             Total: {{getTotal() | number: 2}}
                         </span>
@@ -99,13 +102,15 @@
                     <td>
                         <div class="col-xs-6">$ {{getTotalForList("price") | number: 2 }}</div>
                     </td>
-                    <td>Sold: {{getTotalForList("sold")}}
-                        <br/> Cost: {{getFlipInvestment()}}
-                        <br/> Flip: {{getTotalForList("sold") - getFlipInvestment()}}
+                    {{$parse(flip = getFlipInvestment())}}
+                    <td>Sold: {{getTotalForList("sold")}} {{flip.count}}
+                        <br/> Cost: {{flip.sum}} {{}}
+                        <br/> Flip: {{getTotalForList("sold") - flip.sum | number: 2 }}
                         <br/>
-                        <span ng-class="(getProfit() > 0) ? 'profit' : 'loss'">Profit: {{getProfit() | number: 2}}</span>
                     </td>
-                    <td id="testTag"></td>
+                    <td>
+                        <span ng-class="(getProfit() > 0) ? 'profit' : 'loss'">Net: {{getProfit() | number: 2}}</span>
+                    </td>
                     <td>No delete</td>
                 </tr>
             </tbody>

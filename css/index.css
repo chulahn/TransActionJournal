@@ -3,7 +3,7 @@
 }
 
 .profit {
-  background: green;
+  background: green !important;
 }
 .loss {
   background: red !important;
