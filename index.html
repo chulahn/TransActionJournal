@@ -74,7 +74,7 @@
                     </td>
                     <td>${{getTotalForMonthYear(day.transactions) | number: 2}}
                         <span class="pull-right">
-                            {{getTotal()}}
+                            {{getTotal() | number: 2}}
                         </span>
                     </td>
                     <td></td>
@@ -92,13 +92,13 @@
                         <span class="pull-right">{{ (getTotal() / transactions.length) | number: 2 }}</span>
                     </td>
                     <td>
-                        <div class="col-xs-6">$ {{getTotalForList("price")}}</div>
+                        <div class="col-xs-6">$ {{getTotalForList("price") | number: 2 }}</div>
                     </td>
                     <td>Sold: {{getTotalForList("sold")}}
                         <br/> Cost: {{getFlipInvestment()}}
                         <br/> Flip: {{getTotalForList("sold") - getFlipInvestment()}}
                         <br/>
-                        <span ng-class="(getProfit() > 0) ? 'profit' : 'loss'">Profit: {{getProfit()}}</span>
+                        <span ng-class="(getProfit() > 0) ? 'profit' : 'loss'">Profit: {{getProfit() | number: 2}}</span>
                     </td>
                     <td id="testTag"></td>
                     <td>No delete</td>
