@@ -9,6 +9,10 @@
   width: 100%;
 }
 
+#addTransactionContainer .table {
+  margin-bottom: 0px;
+}
+
 .date-header th {
   background: yellow;
 }
