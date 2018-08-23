@@ -387,6 +387,8 @@
           // console.log($scope.transactions);
         };
 
+        // MonthYear Methods
+
         // Gets sum of a list for a MonthYear
         $scope.getTotalForMonthYear = function(transactions, listName) {
           var sum = 0;
@@ -405,7 +407,23 @@
           );
         };
 
-        // Get sum for all transactions with a listName
+        // Get # of Sold items for a MonthYear
+        $scope.getSoldForMonthYear = function(transactions) {
+          var count = 0;
+          for (var i = 0; i < transactions.length; i++) {
+            if (
+              isNaN(parseFloat(transactions[i].price)) === false &&
+              transactions[i].sold > 0
+            ) {
+              count++;
+            }
+          }
+          return count;
+        };
+
+        // OverallSum Methods
+
+        // Get sum for all transactions with a listName.  eg. sold, price
         $scope.getTotalForList = function(listName) {
           var sum = 0;
           for (var i = 0; i < $scope.transactions.length; i++) {
@@ -415,17 +433,8 @@
           return sum;
         };
 
-        $scope.getTotal = function() {
-          var sum = 0;
-          for (var i = 0; i < $scope.transactions.length; i++) {
-            if (isNaN(parseFloat($scope.transactions[i].price)) === false)
-              sum += parseFloat($scope.transactions[i].price);
-          }
-          return sum;
-        };
-
-        // If Sold, its just Price
-        $scope.getFlipInvestment = function() {
+        // Count flip count and investment.
+        $scope.getOverallFlip = function() {
           var flip = {};
           flip.sum = 0;
           flip.count = 0;

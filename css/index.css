@@ -8,6 +8,10 @@
 .loss {
   background: red !important;
 }
+.profit,
+.loss {
+  color: white;
+}
 
 #addTransactionContainer {
   position: fixed;
