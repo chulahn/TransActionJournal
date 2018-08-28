@@ -392,37 +392,42 @@
         };
 
         $scope.deleteItem = function(transaction) {
-          console.log("deleteItem: ", transaction);
+          var delete = confirm("Delete Item?");
+          if (delete) {
+            console.log("deleteItem: deleting item", transaction);
 
-          var indexToRemove = $scope.transactions.indexOf(transaction);
-          console.log("deleteItem: indexToRemove:", indexToRemove);
-          $scope.transactions.splice(indexToRemove, 1);
+            var indexToRemove = $scope.transactions.indexOf(transaction);
+            console.log("deleteItem: indexToRemove:", indexToRemove);
+            $scope.transactions.splice(indexToRemove, 1);
 
-          var transID = transaction._id.$oid;
+            var transID = transaction._id.$oid;
 
-          var reqURL =
-            "https://api.mlab.com/api/1/databases/eyecoin/collections/transactions/" +
-            transID +
-            "?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws";
+            var reqURL =
+              "https://api.mlab.com/api/1/databases/eyecoin/collections/transactions/" +
+              transID +
+              "?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws";
 
-          $.ajax({
-            url: reqURL,
-            type: "DELETE",
-            async: true,
-            timeout: 0
-          }).done(function() {
-            $scope.getDBTransactions();
-            alert("done delete");
-            localStorage.setItem(
-              "transactionLog",
-              JSON.stringify($scope.transactions)
-            );
-            console.log(
-              "deleteItem: Finished deleting.  getandSetTransaction.  set localStorage"
-            );
-          });
+            $.ajax({
+              url: reqURL,
+              type: "DELETE",
+              async: true,
+              timeout: 0
+            }).done(function() {
+              $scope.getDBTransactions();
+              alert("done delete");
+              localStorage.setItem(
+                "transactionLog",
+                JSON.stringify($scope.transactions)
+              );
+              console.log(
+                "deleteItem: Finished deleting.  getandSetTransaction.  set localStorage"
+              );
+            });
 
-          // console.log($scope.transactions);
+            // console.log($scope.transactions);
+          } else {
+            console.log("deleteItem: not deleting");
+          }
         };
 
         // MonthYear Methods
