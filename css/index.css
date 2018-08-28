@@ -1,9 +1,17 @@
+.input-table {
+  table-layout: fixed;
+}
+
 .input-table input {
   width: 100%;
 }
 
 .input-table td {
   border: 1px solid red;
+}
+
+#editButton {
+  font-size: 10px;
 }
 
 .profit {
