@@ -278,6 +278,8 @@
             //   clickedId
             // );
             clearTransactionInputs();
+
+            $scope.editMode = false;
           }
 
           // Diff transaction, populate transaction, highlight
@@ -296,6 +298,8 @@
 
             //fill hidden input
             $scope.transactionId = transaction._id.$oid;
+
+            $scope.editMode = true;
           }
         };
 
