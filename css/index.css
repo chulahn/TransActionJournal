@@ -2,6 +2,10 @@
   width: 100%;
 }
 
+.input-table td {
+  border: 1px solid red;
+}
+
 .profit {
   background: green !important;
 }

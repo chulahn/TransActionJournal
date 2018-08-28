@@ -33,8 +33,8 @@
                     <th class="col-xs-2">Name</th>
                     <th class="col-xs-2">Price</th>
                     <th class="col-xs-2">Sold</th>
-                    <th>Tag</th>
-                    <th>Delete</th>
+                    <th class="col-xs-3">Tag</th>
+                    <th class="col-xs-1">Delete</th>
                 </tr>
             </thead>
 
@@ -140,41 +140,45 @@
         </section>
     </div>
     <footer id="addTransactionContainer">
-        <!-- <section>
-            <a id="testEditable" data-type="text" data-title="Test Editable.  Enter name">Job Change</a>
-        </section> -->
+        <table class="table table-bordered table-striped">
+            <tbody>
+                <tr>
+                    <td class="col-xs-2">Date 2</td>
+                    <td class="col-xs-2">Name 2</td>
+                    <td class="col-xs-2">Price 2</td>
+                    <td class="col-xs-2">Sold 2</td>
+                    <td class="col-xs-3">Tag 3</td>
+                    <td class="col-xs-1">Delete 1</td>
+                </tr>
+            </tbody>
+        </table>
         <table class="table table-condensed input-table">
             <tbody>
                 <tr>
-                    <td class="col-xs-2">
+                    <td class="col-xs-2">2
                         <input id="date" ng-model="date" type="date">
                         <input id="dateTime" ng-model="dateTime" placeholder="(HH:MM)">
                     </td>
-                    <td class="col-xs-2">
+                    <td class="col-xs-2">2
                         <input id="name" ng-model="name" placeholder="Item Name">
                     </td>
-                    <td class="col-xs-2">
+                    <td class="col-xs-2">2
                         <input id="price" ng-model="price" placeholder="Item Price">
                     </td>
-                    <td class="col-xs-1">
+                    <td class="col-xs-2">2
                         <input id="sold" ng-model="sold" placeholder="Sold Price">
                     </td>
-                    <td class="col-xs-1">
+                    <td class="col-xs-3">3
                         <input id="tags" ng-model="tags" placeholder="Tags">
                     </td>
-                    <td class="col-xs-1">
+                    <td class="col-xs-1">1
                         <button ng-hide="editMode" class="btn btn-success" ng-click="addItem()">Add+</button>
                         <button ng-hide="editMode" class="btn btn-success" ng-click="updateItem()">Update</button>
-                    </td>
-                    <td class="col-xs-1">
-                        <button class="btn btn-success" ng-click="getandSetTransactionsFromDatabase()">Get From Database</button>
-                    </td>
-                    <td>
                         <input ng-model="transactionId" id="transactionId">
                     </td>
-
                 </tr>
             </tbody>
+        </table>
     </footer>
 </body>
 
