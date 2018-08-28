@@ -341,9 +341,13 @@
             transID +
             "?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws";
 
+          var currentTime = new Date();
+
           $.ajax({
             url: reqURL,
-            data: JSON.stringify({ $set: { tags: newTags } }),
+            data: JSON.stringify({
+              $set: { tags: newTags, lastUpdated: currentTime }
+            }),
             type: "PUT",
             contentType: "application/json"
           }).done(function() {
