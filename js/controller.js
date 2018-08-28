@@ -257,26 +257,60 @@
         // Newly clicked item will be highlighted
         // and have information filled so $scope.editTransaction() is ready to be called.
         $scope.fillTransactionInfo = function(transaction, $event) {
-          // highlight row
+          // Compare Last Selected w/ Clicked
+
+          // Get Last Selected Row TR/TD.edit-selected
+          var $lastSelected = $(".edit-selected").parent();
+          var lastSelectedId = $lastSelected.find(".tag").attr("id");
+
+          var $clickedRow = $($event.currentTarget).parent();
+          var clickedId = $clickedRow.find(".tag").attr("id");
+
+          //console.log(lastSelectedId, clickedId);
+
+          // Unhighlight last selected
           $(".edit-selected").removeClass("edit-selected");
-          $($event.currentTarget)
-            .parent()
-            .find("td")
-            .addClass("edit-selected");
 
-          var date = new Date(transaction.date);
-          $scope.date = date;
-          $scope.dateTime = date.getHours() + ":" + date.getMinutes();
+          // Same Transaction clicked, clearInput, remove highlights
+          if (lastSelectedId === clickedId) {
+            // console.log(
+            //   "fillTransactionInfo: lastSelectedId===clickedId",
+            //   clickedId
+            // );
+            clearTransactionInputs();
+          }
 
-          $scope.name = transaction.name;
-          $scope.price = transaction.price;
-          $scope.sold = transaction.sold;
+          // Diff transaction, populate transaction, highlight
+          else {
+            $clickedRow.find("td").addClass("edit-selected");
 
-          $scope.tags = transaction.tags;
+            var date = new Date(transaction.date);
+            $scope.date = date;
+            $scope.dateTime = date.getHours() + ":" + date.getMinutes();
 
-          //fill hidden input
-          $scope.transactionId = transaction._id.$oid;
+            $scope.name = transaction.name;
+            $scope.price = transaction.price;
+            $scope.sold = transaction.sold;
+
+            $scope.tags = transaction.tags;
+
+            //fill hidden input
+            $scope.transactionId = transaction._id.$oid;
+          }
         };
+
+        // Private helper method for deselecting transaction from edit
+        function clearTransactionInputs() {
+          $scope.date = null;
+          $scope.dateTime = null;
+          $scope.name = null;
+          $scope.price = null;
+          $scope.sold = null;
+          $scope.tags = null;
+
+          //clear hidden input
+          $scope.transactionId = null;
+        }
 
         // Create Taggle Tags on browser.
         // has onTagAdd, onTagRemove methods
