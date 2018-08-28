@@ -392,8 +392,8 @@
         };
 
         $scope.deleteItem = function(transaction) {
-          var delete = confirm("Delete Item?");
-          if (delete) {
+          var deleteItem = confirm("Delete Item?");
+          if (deleteItem) {
             console.log("deleteItem: deleting item", transaction);
 
             var indexToRemove = $scope.transactions.indexOf(transaction);
