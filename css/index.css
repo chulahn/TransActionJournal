@@ -3,6 +3,17 @@
   width: 10px;
 }
 
+@media only screen and (max-width: 360px) {
+  .taggle_placeholder {
+    position: relative;
+    display: none;
+  }
+
+  ul.taggle_list {
+    padding-left: 0px;
+  }
+}
+
 .input-table {
   table-layout: fixed;
 }
