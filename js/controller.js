@@ -123,14 +123,14 @@
           console.log("$scope.days: ", $scope.days);
         };
 
-        // Private method that creates object with properties from $scope.inputs
+        // Private method that creates object with properties from $scope.inputs.  Passes this object to DB
         // {}.name , .price, .sold, .date, .tags
         // Used in addItem/updateItem
         function composeTransaction() {
           var transaction = {};
-          transaction.name = $scope.name;
-          transaction.price = $scope.price;
-          transaction.sold = $scope.sold;
+          transaction.name = $scope.name || "Unnamed";
+          transaction.price = $scope.price || 0;
+          transaction.sold = $scope.sold || 0;
 
           // Create itemDate from $scope inputs
           var itemDate;
@@ -205,7 +205,8 @@
                 JSON.stringify($scope.transactions)
               );
               console.log(
-                "addItem: Successfully set localStorage transactionLog"
+                "addItem: Successfully set localStorage transactionLog",
+                $scope.transactions
               );
             });
           });
@@ -395,17 +396,20 @@
           });
         };
 
+        // Asks users whether to delete
+        // Remove locally, then remove from DB
         $scope.deleteItem = function(transaction) {
           var deleteItem = confirm("Delete Item?");
           if (deleteItem) {
             console.log("deleteItem: deleting item", transaction);
 
+            // Remove locally
             var indexToRemove = $scope.transactions.indexOf(transaction);
             console.log("deleteItem: indexToRemove:", indexToRemove);
             $scope.transactions.splice(indexToRemove, 1);
 
+            // Remove from DB
             var transID = transaction._id.$oid;
-
             var reqURL =
               "https://api.mlab.com/api/1/databases/eyecoin/collections/transactions/" +
               transID +
@@ -416,17 +420,22 @@
               type: "DELETE",
               async: true,
               timeout: 0
-            }).done(function() {
-              $scope.getDBTransactions();
-              alert("done delete");
-              localStorage.setItem(
-                "transactionLog",
-                JSON.stringify($scope.transactions)
-              );
-              console.log(
-                "deleteItem: Finished deleting.  getandSetTransaction.  set localStorage"
-              );
-            });
+            })
+              .done(function() {
+                $scope.getDBTransactions();
+                alert("done delete");
+                localStorage.setItem(
+                  "transactionLog",
+                  JSON.stringify($scope.transactions)
+                );
+                console.log(
+                  "deleteItem: Finished deleting.  getandSetTransaction.  set localStorage",
+                  $scope.transactions
+                );
+              })
+              .fail(function(data) {
+                console.log("deleteItem: failed. data", data);
+              });
 
             // console.log($scope.transactions);
           } else {
@@ -436,12 +445,13 @@
 
         // MonthYear Methods
 
-        // Gets sum of a list for a MonthYear
+        // Gets sum of a list for a MonthYear.  e.g. "11/2017.transactions , 'sold'"
         $scope.getTotalForMonthYear = function(transactions, listName) {
           var sum = 0;
           for (var i = 0; i < transactions.length; i++) {
-            if (!isNaN(parseFloat(transactions[i][listName])))
-              sum += parseFloat(transactions[i][listName]);
+            var data = parseFloat(transactions[i][listName]);
+            var dataIsValidFloat = !isNaN(data);
+            if (dataIsValidFloat) sum += data;
           }
           return sum;
         };
@@ -454,14 +464,14 @@
           );
         };
 
-        // Get # of Sold items for a MonthYear
-        $scope.getSoldForMonthYear = function(transactions) {
+        // Get # of Sold items for a MonthYear.  Must be sold, and have valid price
+        $scope.getSoldCountForMonthYear = function(transactions) {
           var count = 0;
           for (var i = 0; i < transactions.length; i++) {
-            if (
-              isNaN(parseFloat(transactions[i].price)) === false &&
-              transactions[i].sold > 0
-            ) {
+            var validPrice = !isNaN(parseFloat(transactions[i].price));
+            var validSold = !isNaN(parseFloat(transactions[i].sold));
+            var sold = parseFloat(transactions[i].sold) > 0;
+            if (validPrice && validSold && sold) {
               count++;
             }
           }
@@ -470,27 +480,29 @@
 
         // OverallSum Methods
 
-        // Get sum for all transactions with a listName.  eg. sold, price
+        // Get sum for all transactions with a listName.  eg. "sold", "price"
         $scope.getTotalForList = function(listName) {
           var sum = 0;
           for (var i = 0; i < $scope.transactions.length; i++) {
-            if (isNaN(parseFloat($scope.transactions[i][listName])) === false)
-              sum += parseFloat($scope.transactions[i][listName]);
+            var data = parseFloat($scope.transactions[i][listName]);
+            var dataIsValidFloat = !isNaN(data);
+            if (dataIsValidFloat) sum += parseFloat(data);
           }
           return sum;
         };
 
-        // Count flip count and investment.
+        // Count flip count and investment.  Add transaction when sold has a value.
         $scope.getOverallFlip = function() {
           var flip = {};
           flip.sum = 0;
           flip.count = 0;
           for (var i = 0; i < $scope.transactions.length; i++) {
-            if (
-              isNaN(parseFloat($scope.transactions[i].price)) === false &&
-              $scope.transactions[i].sold > 0
-            ) {
-              flip.sum += parseFloat($scope.transactions[i].price);
+            var price = parseFloat($scope.transactions[i].price);
+            var validPrice = !isNaN(price);
+            var isAFlip = parseFloat($scope.transactions[i].sold) > 0;
+
+            if (validPrice && isAFlip) {
+              flip.sum += price;
               flip.count++;
             }
           }

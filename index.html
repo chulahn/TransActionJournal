@@ -93,7 +93,7 @@
                     </td>
                     <td>
                         Sold: ${{getTotalForMonthYear(day.transactions, "sold") | number: 2}}
-                        <span class="pull-right">{{getSoldForMonthYear(day.transactions)}}</span>
+                        <span class="pull-right">{{getSoldCountForMonthYear(day.transactions)}}</span>
                     </td>
                     <td ng-class="( (getNetForMonthYear(day.transactions) > 0) ? 'profit' : 'loss')">
                         Net: ${{getNetForMonthYear(day.transactions) | number: 2}}
