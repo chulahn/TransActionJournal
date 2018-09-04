@@ -124,6 +124,49 @@ app.controller("dataController", [
         return $scope.convertedData[key];
       });
       console.log("$scope.days: ", $scope.days);
+      $scope.convertDataWeek();
+    };
+
+    $scope.convertDataWeek = function(data) {
+      // data
+      // 0:{_id: {…}, name: "Crota", price: "9.99", sold: "49.99", date: "2017-11-01T16:46:44.895Z", …}
+      // convertedData
+      // { 11/2017 : {date: Wed Nov 01 2017 12:46:44 GMT-0400 (Eastern Daylight Time), monthYear: "11/2017", transactions: Array(11), $$hashKey: "object:5"}}
+      // mapped
+      // [{date: Wed Nov 01 2017 12:46:44 GMT-0400 (Eastern Daylight Time), monthYear: "11/2017", transactions: Array(11), $$hashKey: "object:5"}]
+
+      var convertedData = {};
+
+      for (var i = 0; i < $scope.transactions.length; i++) {
+        var currentTransaction = $scope.transactions[i];
+        var currentTransDate = new Date(currentTransaction.date);
+
+        var currentTransWeek =
+          currentTransDate.getYear() + 1900 + "|" + currentTransDate.getWeek();
+
+        // If MonthYear not defined, add first transAction.  else push
+        if (convertedData[currentTransWeek] === undefined) {
+          var transActionData = {};
+          transActionData.date = currentTransDate;
+          transActionData.week = currentTransWeek;
+          transActionData.transactions = [];
+          transActionData.transactions.push(currentTransaction);
+
+          convertedData[currentTransWeek] = transActionData;
+        } else {
+          convertedData[currentTransWeek].transactions.push(currentTransaction);
+        }
+      }
+
+      $scope.convertedData = convertedData;
+      console.log("$scope.convertDataWeek: ", $scope.convertedData);
+
+      $scope.weeks = Object.keys($scope.convertedData).map(function(key) {
+        // Take Date Key 5/2/2018
+        // Create Array of Objects with date and exercises
+        return $scope.convertedData[key];
+      });
+      console.log("$scope.weeks: ", $scope.weeks);
     };
 
     // Private method that creates object with properties from $scope.inputs.  Passes this object to DB
