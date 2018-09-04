@@ -12,6 +12,10 @@
   ul.taggle_list {
     padding-left: 0px;
   }
+
+  .nameTd {
+    font-size: 8px;
+  }
 }
 
 .input-table {

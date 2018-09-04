@@ -45,15 +45,15 @@
                     </th>
                     <th>
                         {{day.transactions.length}}
-                        <span class="pull-right">${{getTotalForMonthYear(day.transactions, "price")/day.transactions.length | number: 2}}</span>
+                        <span class="pull-right">${{cH.getTotal(day.transactions, "price")/day.transactions.length | number: 2}}</span>
                     </th>
                     <th>
-                        ${{getTotalForMonthYear(day.transactions, "price") | number: 2}}
+                        ${{cH.getTotal(day.transactions, "price") | number: 2}}
                     </th>
                     <th></th>
                     <th></th>
-                    <th>${{getTotalForMonthYear(day.transactions, "price") | number: 0}} {{getTotalForMonthYear(day.transactions,
-                        "price") / getTotalForList("price") * 100 | number: 0}}%
+                    <th>${{cH.getTotal(day.transactions, "price") | number: 0}} {{cH.getTotal(day.transactions, "price") / cH.getTotal(transactions,
+                        "price") * 100 | number: 0}}%
                     </th>
                 </tr>
                 <!-- Transactions -->
@@ -61,7 +61,7 @@
                     <td>
                         {{trans.date.toDate().toLocaleString()}}
                     </td>
-                    <td ng-click="fillTransactionInfo(trans, $event);">{{trans.name}}</td>
+                    <td ng-click="fillTransactionInfo(trans, $event);" class="nameTd">{{trans.name}}</td>
                     <td>
                         ${{trans.price}}
                     </td>
@@ -82,27 +82,27 @@
                 </tr>
                 <tr class="date-footer">
                     <td>
-                        {{day.monthYear}}
-                    </td>
-                    <td class="date-footer">
-                        {{day.transactions.length}} items
-                        <span class="pull-right">${{getTotalForMonthYear(day.transactions, "price")/day.transactions.length | number: 2}}</span>
+                        {{day.monthYear}} {{cH}}
                     </td>
                     <td>
-                        Total: ${{getTotalForMonthYear(day.transactions, "price") | number: 2}}
                     </td>
                     <td>
-                        Sold: ${{getTotalForMonthYear(day.transactions, "sold") | number: 2}}
-                        <span class="pull-right">{{getSoldCountForMonthYear(day.transactions)}}</span>
-                    </td>
-                    <td ng-class="( (getNetForMonthYear(day.transactions) > 0) ? 'profit' : 'loss')">
-                        Net: ${{getNetForMonthYear(day.transactions) | number: 2}}
+                        Total: ${{cH.getTotal(day.transactions, "price") | number: 2}}
+                        <br>{{day.transactions.length}} items
+                        <br> ${{cH.getTotal(day.transactions, "price")/day.transactions.length | number: 2}}
                     </td>
                     <td>
-                        ${{getTotalForMonthYear(day.transactions, "price") | number: 0}} {{getTotalForMonthYear(day.transactions, "price") / getTotalForList("price")
-                        * 100 | number: 0}}%
+                        Sold: ${{cH.getTotal(day.transactions, "sold") | number: 2}}
+                        <span class="pull-right">{{cH.getSoldCount(day.transactions)}}</span>
+                    </td>
+                    <td ng-class="( (cH.getNetPrice(day.transactions) > 0) ? 'profit' : 'loss')">
+                        Net: ${{cH.getNetPrice(day.transactions) | number: 2}}
+                    </td>
+                    <td>
+                        ${{cH.getTotal(day.transactions, "price") | number: 0}} {{cH.getTotal(day.transactions, "price") / cH.getTotal(transactions,
+                        "price") * 100 | number: 0}}%
                         <span class="pull-right">
-                            Total: {{getTotalForList("price") | number: 2}}
+                            Total: {{ cH.getTotal(transactions, "price") | number: 2}}
                         </span>
                     </td>
                 </tr>
@@ -115,16 +115,16 @@
                     </td>
                     <td>
                         {{transactions.length}} items
-                        <span class="pull-right">{{ (getTotalForList("price") / transactions.length) | number: 2 }}</span>
+                        <span class="pull-right">{{ (cH.getTotal(transactions, "price") / transactions.length) | number: 2 }}</span>
                     </td>
                     <td>
-                        ${{getTotalForList("price") | number: 2 }}
+                        ${{cH.getTotal(transactions, "price") | number: 2 }}
                     </td>
-                    {{$parse(flip = getOverallFlip())}}
+                    {{$parse(flip = cH.getOverallFlip(transactions))}}
                     <td>
-                        Sold: {{getTotalForList("sold")}} {{flip.count}}
+                        Sold: {{cH.getTotal(transactions, "sold")}} {{flip.count}}
                         <br/> Cost: {{flip.sum}} {{}}
-                        <br/> Flip: {{getTotalForList("sold") - flip.sum | number: 2 }}
+                        <br/> Flip: {{cH.getTotal(transactions, "sold") - flip.sum | number: 2 }}
                         <br/>
                     </td>
                     <td>
@@ -189,6 +189,8 @@
     crossorigin="anonymous"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/taggle/1.12.0/taggle.min.js"></script>
+
+<script src="js/factory.js"></script>
 
 <script src="js/controller.js"></script>
 
