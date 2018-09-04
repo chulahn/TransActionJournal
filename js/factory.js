@@ -1,4 +1,4 @@
-var app = angular.module("app", []);
+var app = angular.module("app", ["mwl.calendar"]);
 app.factory("calcHelper", function() {
   return {
     // Gets sum of a list from transactions.  e.g. "11/2017.transactions, $scope.transactions , 'sold'"

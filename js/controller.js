@@ -67,6 +67,29 @@ app.controller("dataController", [
         $scope.$apply(function() {
           $scope.transactions = data;
           $scope.convertData();
+
+          // Format for Calendar
+          // {
+          //   title: "Eddie Bauer Flannel", // The title of the event
+          //   type: "info",
+          //   startsAt: new Date("9/1/2018 11:00"),
+          //   endsAt: new Date("9/1/2018 12:00"),
+          //   editable: false,
+          //   deletable: false,
+          //   incrementsBadgeTotal: true,
+          //   price: 3.89
+          // },
+          $scope.mappedCalendar = $scope.transactions.map(function(trans) {
+            var mapped = {};
+            mapped.title = trans.name;
+            mapped.startsAt = new Date(trans.date);
+            mapped.editable = false;
+            mapped.deletable = false;
+            mapped.incrementsBadgeTotal = true;
+            mapped.price = trans.price;
+
+            return mapped;
+          });
         });
         console.log(
           "getDBTransactions: finished AJAX call. $scope.transactions",
@@ -505,6 +528,68 @@ app.controller("dataController", [
         }
       }
       return flip;
+    };
+
+    // Calendar properties
+    $scope.calendarView = "month";
+    $scope.calendarDay = new Date();
+    $scope.tester = "Is the Controller connecting";
+    $scope.events = [
+      {
+        title: "Eddie Bauer Flannel", // The title of the event
+        type: "info",
+        startsAt: new Date("9/1/2018 11:00"),
+        endsAt: new Date("9/1/2018 12:00"),
+        editable: false,
+        deletable: false,
+        incrementsBadgeTotal: true,
+        price: 3.89
+      },
+      {
+        title: "Toll", // The title of the event
+        type: "info",
+        startsAt: new Date("9/1/2018 11:00"),
+        endsAt: new Date("9/1/2018 12:00"),
+        editable: false,
+        deletable: false,
+        incrementsBadgeTotal: true,
+        price: 2.6
+      },
+      {
+        title: "Ralph Lauren Polo", // The title of the event
+        type: "info",
+        startsAt: new Date("9/1/2018 11:00"),
+        endsAt: new Date("9/1/2018 12:00"),
+        editable: false,
+        deletable: false,
+        incrementsBadgeTotal: true,
+        price: 0.91
+      },
+      {
+        title: "Wells Fargo", // The title of the event
+        type: "info",
+        startsAt: new Date("9/9/2018 11:00"),
+        endsAt: new Date("9/9/2018 12:00"),
+        editable: false,
+        deletable: false,
+        incrementsBadgeTotal: true,
+        price: 15
+      }
+    ];
+    $scope.cellModifier = function(cell) {
+      // console.log(cell);
+
+      if (cell.events.length > 0) {
+        // console.log(cell);
+        console.log(cell.events);
+
+        var sum = 0;
+
+        for (var i = 0; i < cell.events.length; i++) {
+          sum += parseFloat(cell.events[i].price);
+        }
+        cell.label = "$" + sum + " | " + cell.events.length;
+      }
     };
   }
 ]);
