@@ -13,7 +13,6 @@
 
     <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"
     />
-
     <script>
         String.prototype.toDate = function () {
             return new Date(this);
@@ -40,7 +39,7 @@
 
             <tbody ng-repeat="day in days  | orderBy: 'date' ">
                 <tr class="date-header">
-                    <th>
+                    <th class="monthYear">
                         {{day.monthYear}}
                     </th>
                     <th>
@@ -108,7 +107,7 @@
                 </tr>
                 <tr ng-repeat="tag in day.tags" class="tagData-row">
                     <td></td>
-                    <td>
+                    <td class="tag">
                         {{getKeyByValue(day.tags, tag)}}
                     </td>
                     <td>
@@ -205,5 +204,42 @@
 
 <script src="js/factory.js"></script>
 <script src="js/controller.js"></script>
+
+<script>
+
+    $(document).ready(function () {
+        $('body').on('mouseenter', '.tag', function () {
+            // console.log(this);
+            // console.log($(this));
+
+            var tagName = $(this).html().trimStart().trimEnd();
+            var $monthYear = $(this).closest('tbody');
+            var $tags = $(this).closest('tbody').find(".tag");
+            // console.log($tags);
+            // console.log($tags[0]);
+            // console.log($($tags[0]));
+
+            $tags.each(function (index) {
+                // console.log($(this))
+
+                // console.log($(this)[0])
+                // console.log(tagName);
+                // console.log($(this).html());
+                // console.log($(this).html().indexOf(tagName));
+
+                if ($(this).html().indexOf(tagName) !== -1) {
+                    // console.log("Here");
+                    // console.log($(this).closest('tr'))
+
+                    // console.log($(this).closest('tr')[0])
+                    $(this).closest('tr').find("td").addClass("tag-hover");
+                }
+            })
+        });
+        $('body').on('mouseleave', '.tag', function () {
+            $(".tag-hover").removeClass("tag-hover");
+        });
+    })
+</script>
 
 </html>

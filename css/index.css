@@ -63,6 +63,10 @@
   background: greenyellow;
 }
 
+.tag-hover {
+  background: rgb(21, 187, 21);
+}
+
 .date-header th {
   background: yellow;
 }
