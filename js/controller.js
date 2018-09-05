@@ -108,7 +108,7 @@ app.controller("dataController", [
       // 0:{_id: {…}, name: "Crota", price: "9.99", sold: "49.99", date: "2017-11-01T16:46:44.895Z", …}
       // convertedData
       // { 11/2017 : {date: Wed Nov 01 2017 12:46:44 GMT-0400 (Eastern Daylight Time), monthYear: "11/2017", transactions: Array(11), $$hashKey: "object:5"}}
-      // mapped
+      // days
       // [{date: Wed Nov 01 2017 12:46:44 GMT-0400 (Eastern Daylight Time), monthYear: "11/2017", transactions: Array(11), $$hashKey: "object:5"}]
 
       var convertedData = {};
@@ -146,18 +146,39 @@ app.controller("dataController", [
         // Create Array of Objects with date and exercises
         return $scope.convertedData[key];
       });
+
+      // [{date: Wed Nov 01 2017 12:46:44 GMT-0400 (Eastern Daylight Time), monthYear: "11/2017", transactions: Array(11), $$hashKey: "object:5"}]
+      $scope.days = $scope.days.map(function(day) {
+        // For each day, create a .tags property that is an object with keys: tag, object: array of transactions
+        var tagged = {};
+
+        day.transactions.forEach(function(trans) {
+          // Get each transaction
+          if (trans.tags) {
+            // For each tag, add that transaction to tag
+            trans.tags.forEach(function(tag) {
+              tag = tag.trimStart().trimEnd();
+
+              if (!tagged[tag]) {
+                tagged[tag] = [];
+              }
+              tagged[tag].push(trans);
+            });
+
+            day.tags = tagged;
+          } else {
+            console.log("No tags for ", trans, day);
+          }
+        });
+        console.log("Mapped tags");
+        return day;
+      });
+
       console.log("$scope.days: ", $scope.days);
       $scope.convertDataWeek();
     };
 
     $scope.convertDataWeek = function(data) {
-      // data
-      // 0:{_id: {…}, name: "Crota", price: "9.99", sold: "49.99", date: "2017-11-01T16:46:44.895Z", …}
-      // convertedData
-      // { 11/2017 : {date: Wed Nov 01 2017 12:46:44 GMT-0400 (Eastern Daylight Time), monthYear: "11/2017", transactions: Array(11), $$hashKey: "object:5"}}
-      // mapped
-      // [{date: Wed Nov 01 2017 12:46:44 GMT-0400 (Eastern Daylight Time), monthYear: "11/2017", transactions: Array(11), $$hashKey: "object:5"}]
-
       var convertedData = {};
 
       for (var i = 0; i < $scope.transactions.length; i++) {
@@ -181,8 +202,8 @@ app.controller("dataController", [
         }
       }
 
-      $scope.convertedData = convertedData;
-      console.log("$scope.convertDataWeek: ", $scope.convertedData);
+      // $scope.convertedData = convertedData;
+      console.log("$scope.convertDataWeek: convertedData", convertedData);
 
       $scope.weeks = Object.keys($scope.convertedData).map(function(key) {
         // Take Date Key 5/2/2018
@@ -590,6 +611,11 @@ app.controller("dataController", [
         }
         cell.label = "$" + sum + " | " + cell.events.length;
       }
+    };
+
+    // Tag Method
+    $scope.getKeyByValue = function(object, value) {
+      return Object.keys(object).find(key => object[key] === value);
     };
   }
 ]);
