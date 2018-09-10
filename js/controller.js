@@ -1,28 +1,7 @@
-// var app = angular.filter("tag", function(tag) {
-//   return function(input, tg) {
-//     input = input || "";
-//     if (input.tag.indexOf("hype") !== -1) {
-//       console.log(input);
-//       console.log(this);
-//     }
-//   };
-// });
-
 app.controller("dataController", [
   "$scope",
   "calcHelper",
   function($scope, calcHelper) {
-    //mLab API Key - Un-mm4UdPQsFEX65W4eplZvLGtEBjJws
-
-    //Show all databases for this API Key
-    ///https://api.mlab.com/api/1/databases?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws
-
-    //Show all collections for database
-    //https://api.mlab.com/api/1/databases/eyecoin/collections?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws
-
-    //Show all transactions(items) in a collection
-    //https://api.mlab.com/api/1/databases/eyecoin/collections/transactions?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws
-
     //Initialize with Some Dummy Data.
     // [] => .name , .price, .date, .sold, .tags
     $scope.transactions = [
@@ -40,12 +19,7 @@ app.controller("dataController", [
       }
     ];
     $scope.cH = calcHelper;
-    // console.log("$scope ", $scope)
-    // console.log(
-    //   "$scope.cH = calcHelper , calcHelper.getTotalForMonthYear($scope.transactions, 'price')",
-    //   calcHelper,
-    //   calcHelper.getTotalForMonthYear($scope.transactions, "price")
-    // );
+
     //Get previous transactions if available.
     var transactionLog = JSON.parse(localStorage.getItem("transactionLog"));
 
@@ -54,7 +28,7 @@ app.controller("dataController", [
       $scope.transactions = transactionLog;
     }
 
-    // Called after addingItem, or updatingItemTags.
+    // Called after addItem, deletingItem, updateItem, or updatingItemTags.
     // Get transactions from database, and set as $scope data.
     $scope.getDBTransactions = function() {
       console.log("getDBTransactions: calling AJAX");
@@ -141,15 +115,15 @@ app.controller("dataController", [
       $scope.convertedData = convertedData;
       console.log("$scope.convertedData: ", $scope.convertedData);
 
+      // [{date: Wed Nov 01 2017 12:46:44 GMT-0400 (Eastern Daylight Time), monthYear: "11/2017", transactions: Array(11), $$hashKey: "object:5"}]
       $scope.days = Object.keys($scope.convertedData).map(function(key) {
         // Take Date Key 5/2/2018
         // Create Array of Objects with date and exercises
         return $scope.convertedData[key];
       });
 
-      // [{date: Wed Nov 01 2017 12:46:44 GMT-0400 (Eastern Daylight Time), monthYear: "11/2017", transactions: Array(11), $$hashKey: "object:5"}]
+      // For each day, create a .tags property that is an object with keys: tag, object: array of transactions
       $scope.days = $scope.days.map(function(day) {
-        // For each day, create a .tags property that is an object with keys: tag, object: array of transactions
         var tagged = {};
 
         day.transactions.forEach(function(trans) {
@@ -254,6 +228,9 @@ app.controller("dataController", [
 
         if (typeof $scope.tags === "string") {
           transaction.tags = $scope.tags.split(",");
+          transaction.tags.forEach(function(t) {
+            t = t.trimStart().trimEnd();
+          });
         }
       } else {
         console.log("composeTransaction: no tags, adding hype");
@@ -279,26 +256,17 @@ app.controller("dataController", [
       }).done(function() {
         // after successfully adding item, update localStorage
         // ajax called must be called so id can be saved in localStorage
-
-        $.ajax({
-          url:
-            "https://api.mlab.com/api/1/databases/eyecoin/collections/transactions?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws",
-          type: "GET",
-          contentType: "application/json"
-        }).done(function(data) {
-          $scope.$apply(function() {
-            $scope.transactions = data;
-            $scope.convertData();
-          });
-          localStorage.setItem(
-            "transactionLog",
-            JSON.stringify($scope.transactions)
-          );
-          console.log(
-            "addItem: Successfully set localStorage transactionLog",
-            $scope.transactions
-          );
+        $scope.$apply(function() {
+          $scope.getDBTransactions();
         });
+        localStorage.setItem(
+          "transactionLog",
+          JSON.stringify($scope.transactions)
+        );
+        console.log(
+          "addItem: Successfully set localStorage transactionLog",
+          $scope.transactions
+        );
       });
     };
 
@@ -323,24 +291,14 @@ app.controller("dataController", [
         type: "PUT",
         contentType: "application/json"
       }).done(function() {
-        $.ajax({
-          url:
-            "https://api.mlab.com/api/1/databases/eyecoin/collections/transactions?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws",
-          type: "GET",
-          contentType: "application/json"
-        }).done(function(data) {
-          $scope.$apply(function() {
-            $scope.transactions = data;
-            $scope.convertData();
-          });
-          localStorage.setItem(
-            "transactionLog",
-            JSON.stringify($scope.transactions)
-          );
-          console.log(
-            "updateItem: Successfully set localStorage transactionLog"
-          );
+        $scope.$apply(function() {
+          $scope.getDBTransactions();
         });
+        localStorage.setItem(
+          "transactionLog",
+          JSON.stringify($scope.transactions)
+        );
+        console.log("updateItem: Successfully set localStorage transactionLog");
       });
     };
 

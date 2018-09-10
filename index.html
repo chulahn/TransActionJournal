@@ -218,7 +218,7 @@
             // console.log($tags);
             // console.log($tags[0]);
             // console.log($($tags[0]));
-
+            // console.log(tagName);
             $tags.each(function (index) {
                 // console.log($(this))
 
@@ -236,9 +236,27 @@
                 }
             })
         });
+
         $('body').on('mouseleave', '.tag', function () {
             $(".tag-hover").removeClass("tag-hover");
         });
+
+        $('body').on('mouseenter', '.tag .taggle', function () {
+            var tagName = $(this).find('.taggle_text').html().trimStart().trimEnd();
+            var $monthYear = $(this).closest('tbody');
+            var $tags = $(this).closest('tbody').find(".tag");
+
+            $tags.each(function (index) {
+                if ($(this).html().indexOf(tagName) !== -1) {
+                    $(this).closest('tr').find("td").addClass("tag-hover");
+                }
+            });
+        })
+
+        $('body').on('mouseleave', '.tag .taggle', function () {
+            $(".tag-hover").removeClass("tag-hover");
+        });
+
     })
 </script>
 
