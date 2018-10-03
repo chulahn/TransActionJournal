@@ -34,7 +34,7 @@ app.controller("dataController", [
       console.log("getDBTransactions: calling AJAX");
       $.ajax({
         url:
-          "https://api.mlab.com/api/1/databases/eyecoin/collections/transactions?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws",
+          "https://api.mlab.com/api/1/databases/eyecoin/collections/demo?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws",
         type: "GET",
         contentType: "application/json"
       }).done(function(data) {
@@ -238,7 +238,7 @@ app.controller("dataController", [
 
       $.ajax({
         url:
-          "https://api.mlab.com/api/1/databases/eyecoin/collections/transactions?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws",
+          "https://api.mlab.com/api/1/databases/eyecoin/collections/demo?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws",
         data: JSON.stringify(itemToAdd),
         type: "POST",
         contentType: "application/json"
@@ -270,7 +270,7 @@ app.controller("dataController", [
 
       //PUT /databases/{database}/collections/{collection}/{_id}
       var reqURL =
-        "https://api.mlab.com/api/1/databases/eyecoin/collections/transactions/" +
+        "https://api.mlab.com/api/1/databases/eyecoin/collections/demo/" +
         transID +
         "?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws";
 
@@ -413,7 +413,7 @@ app.controller("dataController", [
       var transID = transaction._id.$oid;
 
       var reqURL =
-        "https://api.mlab.com/api/1/databases/eyecoin/collections/transactions/" +
+        "https://api.mlab.com/api/1/databases/eyecoin/collections/demo/" +
         transID +
         "?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws";
 
@@ -448,7 +448,7 @@ app.controller("dataController", [
         // Remove from DB
         var transID = transaction._id.$oid;
         var reqURL =
-          "https://api.mlab.com/api/1/databases/eyecoin/collections/transactions/" +
+          "https://api.mlab.com/api/1/databases/eyecoin/collections/demo/" +
           transID +
           "?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws";
 
