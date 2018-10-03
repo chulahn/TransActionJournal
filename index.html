@@ -155,35 +155,35 @@
     <table class="table table-condensed table-bordered table-striped">
       <tbody>
         <tr>
-          <td class="col-xs-2">Date 2</td>
-          <td class="col-xs-2">Name 2</td>
-          <td class="col-xs-2">Price 2</td>
-          <td class="col-xs-2">Sold 2</td>
-          <td class="col-xs-3">Tag 3</td>
-          <td class="col-xs-1">1</td>
+          <td class="col-xs-2">Date</td>
+          <td class="col-xs-2">Name</td>
+          <td class="col-xs-2">Price</td>
+          <td class="col-xs-2">Sold</td>
+          <td class="col-xs-3">Tag</td>
+          <td class="col-xs-1">Action</td>
         </tr>
       </tbody>
     </table>
     <table class="table table-condensed input-table">
       <tbody>
         <tr>
-          <td class="col-xs-2">2
+          <td class="col-xs-2">
             <input id="date" ng-model="date" type="date">
             <input id="dateTime" ng-model="dateTime" placeholder="(HH:MM)">
           </td>
-          <td class="col-xs-2">2
+          <td class="col-xs-2">
             <input id="name" ng-model="name" placeholder="Item Name">
           </td>
-          <td class="col-xs-2">2
+          <td class="col-xs-2">
             <input id="price" ng-model="price" placeholder="Item Price">
           </td>
-          <td class="col-xs-2">2
+          <td class="col-xs-2">
             <input id="sold" ng-model="sold" placeholder="Sold Price">
           </td>
-          <td class="col-xs-3">3
+          <td class="col-xs-3">
             <input id="tags" ng-model="tags" placeholder="Tags">
           </td>
-          <td class="col-xs-1">1
+          <td class="col-xs-1">
             <button ng-hide="editMode" class="btn btn-success" ng-click="addItem()">Add+</button>
             <button ng-show="editMode" class="btn btn-success" id="editButton" ng-click="updateItem()">Update</button>
             <input ng-model="transactionId" id="transactionId">
