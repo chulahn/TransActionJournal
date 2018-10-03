@@ -2,202 +2,203 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Transaction App</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
-        crossorigin="anonymous">
-    <link rel="stylesheet" href="https://sean.is/assets/projects/taggle/css/taggle.css">
-    <link rel="stylesheet" href="css/index.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Transaction App</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+    crossorigin="anonymous">
+  <link rel="stylesheet" href="https://sean.is/assets/projects/taggle/css/taggle.css">
+  <link rel="stylesheet" href="css/index.css">
 
-    <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet"
-    />
-    <script>
-        String.prototype.toDate = function () {
-            return new Date(this);
-        }
-        Date.prototype.toDate = function () {
-            return new Date(this);
-        }
-    </script>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" rel="stylesheet" />
+  <script>
+    String.prototype.toDate = function () {
+      return new Date(this);
+    }
+    Date.prototype.toDate = function () {
+      return new Date(this);
+    }
+  </script>
 </head>
 
 <body ng-app="app" ng-controller="dataController">
-    <div id="transactionContainer">
-        <table class="table table-bordered table-striped table-condensed transaction-table">
-            <thead>
-                <tr>
-                    <th class="col-xs-2">Date</th>
-                    <th class="col-xs-2">Name</th>
-                    <th class="col-xs-2">Price</th>
-                    <th class="col-xs-2">Sold</th>
-                    <th class="col-xs-3">Tag</th>
-                    <th class="col-xs-1">Delete</th>
-                </tr>
-            </thead>
+  <div id="transactionContainer">
+    <table class="table table-bordered table-striped table-condensed transaction-table">
+      <thead>
+        <tr>
+          <th class="col-xs-2">Date</th>
+          <th class="col-xs-2">Name</th>
+          <th class="col-xs-2">Price</th>
+          <th class="col-xs-2">Sold</th>
+          <th class="col-xs-3">Tag</th>
+          <th class="col-xs-1">Delete</th>
+        </tr>
+      </thead>
 
-            <tbody ng-repeat="day in days  | orderBy: 'date' ">
-                <tr class="date-header">
-                    <th class="monthYear">
-                        {{day.monthYear}}
-                    </th>
-                    <th>
-                        {{day.transactions.length}}
-                        <span class="pull-right">${{cH.getTotal(day.transactions, "price")/day.transactions.length | number: 2}}</span>
-                    </th>
-                    <th>
-                        ${{cH.getTotal(day.transactions, "price") | number: 2}}
-                    </th>
-                    <th></th>
-                    <th></th>
-                    <th>${{cH.getTotal(day.transactions, "price") | number: 0}} {{cH.getTotal(day.transactions, "price") / cH.getTotal(transactions,
-                        "price") * 100 | number: 0}}%
-                    </th>
-                </tr>
-                <!-- Transactions -->
-                <tr ng-repeat="trans in day.transactions | orderBy: 'date'" transId={{trans._id}}>
-                    <td>
-                        {{trans.date.toDate().toLocaleString()}}
-                    </td>
-                    <td ng-click="fillTransactionInfo(trans, $event);" class="nameTd">{{trans.name}}</td>
-                    <td>
-                        ${{trans.price}}
-                    </td>
-                    <td>
-                        {{trans.sold}}
-                        <span ng-class="(trans.sold - trans.price > 0) ? 'profit' : 'loss'" class="pull-right">
-                            {{trans.sold - trans.price}}
-                        </span>
-                    </td>
-                    <td class="tag" id="{{trans._id.$oid}}">
-                        {{populateTags(trans)}}
-                    </td>
-                    <td>
-                        <span ng-click="deleteItem(trans)">
-                            X
-                        </span>
-                    </td>
-                </tr>
-                <tr class="date-footer">
-                    <td>
-                        {{day.monthYear}} {{cH}}
-                    </td>
-                    <td>
-                    </td>
-                    <td>
-                        Total: ${{cH.getTotal(day.transactions, "price") | number: 2}}
-                        <br>{{day.transactions.length}} items
-                        <br> ${{cH.getTotal(day.transactions, "price")/day.transactions.length | number: 2}}
-                    </td>
-                    <td>
-                        Sold: ${{cH.getTotal(day.transactions, "sold") | number: 2}}
-                        <span class="pull-right">{{cH.getSoldCount(day.transactions)}}</span>
-                    </td>
-                    <td ng-class="( (cH.getNetPrice(day.transactions) > 0) ? 'profit' : 'loss')">
-                        Net: ${{cH.getNetPrice(day.transactions) | number: 2}}
-                    </td>
-                    <td>
-                        ${{cH.getTotal(day.transactions, "price") | number: 0}} {{cH.getTotal(day.transactions, "price") / cH.getTotal(transactions,
-                        "price") * 100 | number: 0}}%
-                        <span class="pull-right">
-                            Total: {{ cH.getTotal(transactions, "price") | number: 2}}
-                        </span>
-                    </td>
-                </tr>
-                <tr ng-repeat="tag in day.tags" class="tagData-row">
-                    <td></td>
-                    <td class="tag">
-                        {{getKeyByValue(day.tags, tag)}}
-                    </td>
-                    <td>
-                        {{cH.getTotal(tag, "price")}}
-                    </td>
-                    <td>
-                        {{tag.length}}
-                    </td>
-                </tr>
-            </tbody>
+      <tbody ng-repeat="day in days  | orderBy: 'date' ">
+        <tr class="date-header">
+          <th class="monthYear">
+            {{day.monthYear}}
+          </th>
+          <th>
+            {{day.transactions.length}}
+            <span class="pull-right">${{cH.getTotal(day.transactions, "price")/day.transactions.length | number: 2}}</span>
+          </th>
+          <th>
+            ${{cH.getTotal(day.transactions, "price") | number: 2}}
+          </th>
+          <th></th>
+          <th></th>
+          <th>${{cH.getTotal(day.transactions, "price") | number: 0}} {{cH.getTotal(day.transactions, "price") /
+            cH.getTotal(transactions,
+            "price") * 100 | number: 0}}%
+          </th>
+        </tr>
+        <!-- Transactions -->
+        <tr ng-repeat="trans in day.transactions | orderBy: 'date'" transId={{trans._id}}>
+          <td>
+            {{trans.date.toDate().toLocaleString()}}
+          </td>
+          <td ng-click="fillTransactionInfo(trans, $event);" class="nameTd">{{trans.name}}</td>
+          <td>
+            ${{trans.price}}
+          </td>
+          <td>
+            {{trans.sold}}
+            <span ng-class="(trans.sold - trans.price > 0) ? 'profit' : 'loss'" class="pull-right">
+              {{trans.sold - trans.price}}
+            </span>
+          </td>
+          <td class="tag" id="{{trans._id.$oid}}">
+            {{populateTags(trans)}}
+          </td>
+          <td>
+            <span ng-click="deleteItem(trans)">
+              X
+            </span>
+          </td>
+        </tr>
+        <tr class="date-footer">
+          <td>
+            {{day.monthYear}} {{cH}}
+          </td>
+          <td>
+          </td>
+          <td>
+            Total: ${{cH.getTotal(day.transactions, "price") | number: 2}}
+            <br>{{day.transactions.length}} items
+            <br> ${{cH.getTotal(day.transactions, "price")/day.transactions.length | number: 2}}
+          </td>
+          <td>
+            Sold: ${{cH.getTotal(day.transactions, "sold") | number: 2}}
+            <span class="pull-right">{{cH.getSoldCount(day.transactions)}}</span>
+          </td>
+          <td ng-class="( (cH.getNetPrice(day.transactions) > 0) ? 'profit' : 'loss')">
+            Net: ${{cH.getNetPrice(day.transactions) | number: 2}}
+          </td>
+          <td>
+            ${{cH.getTotal(day.transactions, "price") | number: 0}} {{cH.getTotal(day.transactions, "price") /
+            cH.getTotal(transactions,
+            "price") * 100 | number: 0}}%
+            <span class="pull-right">
+              Total: {{ cH.getTotal(transactions, "price") | number: 2}}
+            </span>
+          </td>
+        </tr>
+        <tr ng-repeat="tag in day.tags" class="tagData-row">
+          <td></td>
+          <td class="tag">
+            {{getKeyByValue(day.tags, tag)}}
+          </td>
+          <td>
+            {{cH.getTotal(tag, "price")}}
+          </td>
+          <td>
+            {{tag.length}}
+          </td>
+        </tr>
+      </tbody>
 
-            <tbody id="overallSum">
-                <tr class="final-footer">
-                    <td>
-                        Grand Total:
-                    </td>
-                    <td>
-                        {{transactions.length}} items
-                        <span class="pull-right">{{ (cH.getTotal(transactions, "price") / transactions.length) | number: 2 }}</span>
-                    </td>
-                    <td>
-                        ${{cH.getTotal(transactions, "price") | number: 2 }}
-                    </td>
-                    {{$parse(flip = cH.getOverallFlip(transactions))}}
-                    <td>
-                        Sold: {{cH.getTotal(transactions, "sold")}} {{flip.count}}
-                        <br/> Cost: {{flip.sum}} {{}}
-                        <br/> Flip: {{cH.getTotal(transactions, "sold") - flip.sum | number: 2 }}
-                        <br/>
-                    </td>
-                    <td>
-                        <span ng-class="(getProfit() > 0) ? 'profit' : 'loss'">Net: {{getProfit() | number: 2}}</span>
-                    </td>
-                    <td></td>
-                </tr>
-            </tbody>
-        </table>
+      <tbody id="overallSum">
+        <tr class="final-footer">
+          <td>
+            Grand Total:
+          </td>
+          <td>
+            {{transactions.length}} items
+            <span class="pull-right">{{ (cH.getTotal(transactions, "price") / transactions.length) | number: 2 }}</span>
+          </td>
+          <td>
+            ${{cH.getTotal(transactions, "price") | number: 2 }}
+          </td>
+          {{$parse(flip = cH.getOverallFlip(transactions))}}
+          <td>
+            Sold: {{cH.getTotal(transactions, "sold")}} {{flip.count}}
+            <br /> Cost: {{flip.sum}} {{}}
+            <br /> Flip: {{cH.getTotal(transactions, "sold") - flip.sum | number: 2 }}
+            <br />
+          </td>
+          <td>
+            <span ng-class="(getProfit() > 0) ? 'profit' : 'loss'">Net: {{getProfit() | number: 2}}</span>
+          </td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
 
-        <section id="bottomSection">
-            Statistics
-        </section>
-    </div>
-    <footer id="addTransactionContainer">
-        <table class="table table-condensed table-bordered table-striped">
-            <tbody>
-                <tr>
-                    <td class="col-xs-2">Date 2</td>
-                    <td class="col-xs-2">Name 2</td>
-                    <td class="col-xs-2">Price 2</td>
-                    <td class="col-xs-2">Sold 2</td>
-                    <td class="col-xs-3">Tag 3</td>
-                    <td class="col-xs-1">1</td>
-                </tr>
-            </tbody>
-        </table>
-        <table class="table table-condensed input-table">
-            <tbody>
-                <tr>
-                    <td class="col-xs-2">2
-                        <input id="date" ng-model="date" type="date">
-                        <input id="dateTime" ng-model="dateTime" placeholder="(HH:MM)">
-                    </td>
-                    <td class="col-xs-2">2
-                        <input id="name" ng-model="name" placeholder="Item Name">
-                    </td>
-                    <td class="col-xs-2">2
-                        <input id="price" ng-model="price" placeholder="Item Price">
-                    </td>
-                    <td class="col-xs-2">2
-                        <input id="sold" ng-model="sold" placeholder="Sold Price">
-                    </td>
-                    <td class="col-xs-3">3
-                        <input id="tags" ng-model="tags" placeholder="Tags">
-                    </td>
-                    <td class="col-xs-1">1
-                        <button ng-hide="editMode" class="btn btn-success" ng-click="addItem()">Add+</button>
-                        <button ng-show="editMode" class="btn btn-success" id="editButton" ng-click="updateItem()">Update</button>
-                        <input ng-model="transactionId" id="transactionId">
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </footer>
+    <section id="bottomSection">
+      Statistics
+    </section>
+  </div>
+  <footer id="addTransactionContainer">
+    <table class="table table-condensed table-bordered table-striped">
+      <tbody>
+        <tr>
+          <td class="col-xs-2">Date 2</td>
+          <td class="col-xs-2">Name 2</td>
+          <td class="col-xs-2">Price 2</td>
+          <td class="col-xs-2">Sold 2</td>
+          <td class="col-xs-3">Tag 3</td>
+          <td class="col-xs-1">1</td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table table-condensed input-table">
+      <tbody>
+        <tr>
+          <td class="col-xs-2">2
+            <input id="date" ng-model="date" type="date">
+            <input id="dateTime" ng-model="dateTime" placeholder="(HH:MM)">
+          </td>
+          <td class="col-xs-2">2
+            <input id="name" ng-model="name" placeholder="Item Name">
+          </td>
+          <td class="col-xs-2">2
+            <input id="price" ng-model="price" placeholder="Item Price">
+          </td>
+          <td class="col-xs-2">2
+            <input id="sold" ng-model="sold" placeholder="Sold Price">
+          </td>
+          <td class="col-xs-3">3
+            <input id="tags" ng-model="tags" placeholder="Tags">
+          </td>
+          <td class="col-xs-1">1
+            <button ng-hide="editMode" class="btn btn-success" ng-click="addItem()">Add+</button>
+            <button ng-show="editMode" class="btn btn-success" id="editButton" ng-click="updateItem()">Update</button>
+            <input ng-model="transactionId" id="transactionId">
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </footer>
 </body>
 
 <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
-    crossorigin="anonymous"></script>
+  crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.3/angular.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
-    crossorigin="anonymous"></script>
+  crossorigin="anonymous"></script>
 <script src="http://momentjs.com/downloads/moment.min.js"></script>
 <script src="./js/angular-bootstrap-calendar.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/taggle/1.12.0/taggle.min.js"></script>
@@ -207,57 +208,57 @@
 
 <script>
 
-    $(document).ready(function () {
-        $('body').on('mouseenter', '.tag', function () {
-            // console.log(this);
-            // console.log($(this));
+  $(document).ready(function () {
+    $('body').on('mouseenter', '.tag', function () {
+      // console.log(this);
+      // console.log($(this));
 
-            var tagName = $(this).html().trimStart().trimEnd();
-            var $monthYear = $(this).closest('tbody');
-            var $tags = $(this).closest('tbody').find(".tag");
-            // console.log($tags);
-            // console.log($tags[0]);
-            // console.log($($tags[0]));
-            // console.log(tagName);
-            $tags.each(function (index) {
-                // console.log($(this))
+      var tagName = $(this).html().trimStart().trimEnd();
+      var $monthYear = $(this).closest('tbody');
+      var $tags = $(this).closest('tbody').find(".tag");
+      // console.log($tags);
+      // console.log($tags[0]);
+      // console.log($($tags[0]));
+      // console.log(tagName);
+      $tags.each(function (index) {
+        // console.log($(this))
 
-                // console.log($(this)[0])
-                // console.log(tagName);
-                // console.log($(this).html());
-                // console.log($(this).html().indexOf(tagName));
+        // console.log($(this)[0])
+        // console.log(tagName);
+        // console.log($(this).html());
+        // console.log($(this).html().indexOf(tagName));
 
-                if ($(this).html().indexOf(tagName) !== -1) {
-                    // console.log("Here");
-                    // console.log($(this).closest('tr'))
+        if ($(this).html().indexOf(tagName) !== -1) {
+          // console.log("Here");
+          // console.log($(this).closest('tr'))
 
-                    // console.log($(this).closest('tr')[0])
-                    $(this).closest('tr').find("td").addClass("tag-hover");
-                }
-            })
-        });
+          // console.log($(this).closest('tr')[0])
+          $(this).closest('tr').find("td").addClass("tag-hover");
+        }
+      })
+    });
 
-        $('body').on('mouseleave', '.tag', function () {
-            $(".tag-hover").removeClass("tag-hover");
-        });
+    $('body').on('mouseleave', '.tag', function () {
+      $(".tag-hover").removeClass("tag-hover");
+    });
 
-        $('body').on('mouseenter', '.tag .taggle', function () {
-            var tagName = $(this).find('.taggle_text').html().trimStart().trimEnd();
-            var $monthYear = $(this).closest('tbody');
-            var $tags = $(this).closest('tbody').find(".tag");
+    $('body').on('mouseenter', '.tag .taggle', function () {
+      var tagName = $(this).find('.taggle_text').html().trimStart().trimEnd();
+      var $monthYear = $(this).closest('tbody');
+      var $tags = $(this).closest('tbody').find(".tag");
 
-            $tags.each(function (index) {
-                if ($(this).html().indexOf(tagName) !== -1) {
-                    $(this).closest('tr').find("td").addClass("tag-hover");
-                }
-            });
-        })
-
-        $('body').on('mouseleave', '.tag .taggle', function () {
-            $(".tag-hover").removeClass("tag-hover");
-        });
-
+      $tags.each(function (index) {
+        if ($(this).html().indexOf(tagName) !== -1) {
+          $(this).closest('tr').find("td").addClass("tag-hover");
+        }
+      });
     })
+
+    $('body').on('mouseleave', '.tag .taggle', function () {
+      $(".tag-hover").removeClass("tag-hover");
+    });
+
+  })
 </script>
 
 </html>
