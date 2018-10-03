@@ -76,20 +76,24 @@ app.controller("dataController", [
 
     $scope.getDBTransactions();
 
-    // Make a seprate array that each element is a Day with transactions
-    $scope.convertData = function(data) {
-      // data
-      // 0:{_id: {…}, name: "Crota", price: "9.99", sold: "49.99", date: "2017-11-01T16:46:44.895Z", …}
-      // convertedData
-      // { 11/2017 : {date: Wed Nov 01 2017 12:46:44 GMT-0400 (Eastern Daylight Time), monthYear: "11/2017", transactions: Array(11), $$hashKey: "object:5"}}
-      // days
-      // [{date: Wed Nov 01 2017 12:46:44 GMT-0400 (Eastern Daylight Time), monthYear: "11/2017", transactions: Array(11), $$hashKey: "object:5"}]
+    /* 
+      $scope.convertData(data) : Make a seprate array that each element is a Day with transactions.  Days have tags
+      @params data : {_id: {…}, name: "Crota", price: "9.99", sold: "49.99", date: "2017-11-01T16:46:44.895Z", …}
+        
+        convertedData : { 11/2017 : {date: Wed Nov 01 2017 12:46:44 GMT-0400 (Eastern Daylight Time), monthYear: "11/2017", transactions: Array(11), $$hashKey: "object:5"}}
 
-      var convertedData = {};
+        days : [{date: Wed Nov 01 2017 12:46:44 GMT-0400 (Eastern Daylight Time), monthYear: "11/2017", transactions: Array(11), $$hashKey: "object:5"}]
+
+    */
+    $scope.convertData = function(data) {
+      var monthYearObject = {};
+      var weeksObject = {};
 
       for (var i = 0; i < $scope.transactions.length; i++) {
         var currentTransaction = $scope.transactions[i];
         var currentTransDate = new Date(currentTransaction.date);
+
+        // MonthYear
         var currentTransMonthYear =
           currentTransDate.getMonth() +
           1 +
@@ -97,94 +101,79 @@ app.controller("dataController", [
           (currentTransDate.getYear() + 1900);
 
         // If MonthYear not defined, add first transAction.  else push
-        if (convertedData[currentTransMonthYear] === undefined) {
+        if (monthYearObject[currentTransMonthYear] === undefined) {
           var transActionData = {};
           transActionData.date = currentTransDate;
           transActionData.monthYear = currentTransMonthYear;
           transActionData.transactions = [];
           transActionData.transactions.push(currentTransaction);
 
-          convertedData[currentTransMonthYear] = transActionData;
+          monthYearObject[currentTransMonthYear] = transActionData;
         } else {
-          convertedData[currentTransMonthYear].transactions.push(
+          monthYearObject[currentTransMonthYear].transactions.push(
             currentTransaction
           );
         }
-      }
 
-      $scope.convertedData = convertedData;
-      console.log("$scope.convertedData: ", $scope.convertedData);
-
-      // [{date: Wed Nov 01 2017 12:46:44 GMT-0400 (Eastern Daylight Time), monthYear: "11/2017", transactions: Array(11), $$hashKey: "object:5"}]
-      $scope.days = Object.keys($scope.convertedData).map(function(key) {
-        // Take Date Key 5/2/2018
-        // Create Array of Objects with date and exercises
-        return $scope.convertedData[key];
-      });
-
-      // For each day, create a .tags property that is an object with keys: tag, object: array of transactions
-      $scope.days = $scope.days.map(function(day) {
-        var tagged = {};
-
-        day.transactions.forEach(function(trans) {
-          // Get each transaction
-          if (trans.tags) {
-            // For each tag, add that transaction to tag
-            trans.tags.forEach(function(tag) {
-              tag = tag.trimStart().trimEnd();
-
-              if (!tagged[tag]) {
-                tagged[tag] = [];
-              }
-              tagged[tag].push(trans);
-            });
-
-            day.tags = tagged;
-          } else {
-            console.log("No tags for ", trans, day);
-          }
-        });
-        console.log("Mapped tags");
-        return day;
-      });
-
-      console.log("$scope.days: ", $scope.days);
-      $scope.convertDataWeek();
-    };
-
-    $scope.convertDataWeek = function(data) {
-      var convertedData = {};
-
-      for (var i = 0; i < $scope.transactions.length; i++) {
-        var currentTransaction = $scope.transactions[i];
-        var currentTransDate = new Date(currentTransaction.date);
-
+        // Week
         var currentTransWeek =
           currentTransDate.getYear() + 1900 + "|" + currentTransDate.getWeek();
 
-        // If MonthYear not defined, add first transAction.  else push
-        if (convertedData[currentTransWeek] === undefined) {
+        // If Week not defined, add first transAction.  else push
+        if (weeksObject[currentTransWeek] === undefined) {
           var transActionData = {};
           transActionData.date = currentTransDate;
           transActionData.week = currentTransWeek;
           transActionData.transactions = [];
           transActionData.transactions.push(currentTransaction);
 
-          convertedData[currentTransWeek] = transActionData;
+          weeksObject[currentTransWeek] = transActionData;
         } else {
-          convertedData[currentTransWeek].transactions.push(currentTransaction);
+          weeksObject[currentTransWeek].transactions.push(currentTransaction);
         }
       }
 
-      // $scope.convertedData = convertedData;
-      console.log("$scope.convertDataWeek: convertedData", convertedData);
+      $scope.transactionsByMonthYear = Object.keys(monthYearObject).map(
+        function(key) {
+          // Take Date Key 5/2/2018
+          // Create Array of Objects with date and exercises
+          return monthYearObject[key];
+        }
+      );
 
-      $scope.weeks = Object.keys($scope.convertedData).map(function(key) {
+      // For each day, add a .tags property that is an object with keys: tag, object: array of transactions
+      // e.g. { tag_name: [transactions] }
+      $scope.transactionsByMonthYear = $scope.transactionsByMonthYear.map(
+        function(day) {
+          var tagObject = {};
+
+          day.transactions.forEach(function(trans) {
+            if (trans.tags) {
+              trans.tags.forEach(function(tag) {
+                tag = tag.trimStart().trimEnd();
+
+                var tagNotCreated = !tagObject[tag];
+                if (tagNotCreated) {
+                  tagObject[tag] = [];
+                }
+                tagObject[tag].push(trans);
+              });
+
+              day.tags = tagObject;
+            } else {
+              console.log("No tags for ", trans, day);
+            }
+          });
+          console.log("Mapped tags");
+          return day;
+        }
+      );
+
+      $scope.transactionsByWeek = Object.keys(weeksObject).map(function(key) {
         // Take Date Key 5/2/2018
         // Create Array of Objects with date and exercises
-        return $scope.convertedData[key];
+        return weeksObject[key];
       });
-      console.log("$scope.weeks: ", $scope.weeks);
     };
 
     // Private method that creates object with properties from $scope.inputs.  Passes this object to DB
