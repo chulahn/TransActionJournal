@@ -42,7 +42,8 @@
           <th class="col-xs-2">Date</th>
           <th class="col-xs-2">Name</th>
           <th class="col-xs-2">Price</th>
-          <th class="col-xs-2">Sold</th>
+          <th class="col-xs-2"></th>
+          <!-- Show if seller <th class="col-xs-2">Sold</th> -->
           <th class="col-xs-3">Tag</th>
           <th class="col-xs-1">Delete</th>
         </tr>
@@ -54,17 +55,23 @@
             {{day.monthYear}}
           </th>
           <th>
-            {{day.transactions.length}}
-            <span class="pull-right">${{cH.getTotal(day.transactions, "price")/day.transactions.length | number: 2}}</span>
+            <!-- # of items.  Avg Price
+              {{day.transactions.length}}
+              <span class="pull-right">${{cH.getTotal(day.transactions, "price")/day.transactions.length | number: 2}}</span>
+            -->
           </th>
           <th>
-            ${{cH.getTotal(day.transactions, "price") | number: 2}}
+            <!-- Total -->
+            <!-- ${{cH.getTotal(day.transactions, "price") | number: 2}} -->
           </th>
           <th></th>
           <th></th>
-          <th>${{cH.getTotal(day.transactions, "price") | number: 0}} {{cH.getTotal(day.transactions, "price") /
-            cH.getTotal(transactions,
-            "price") * 100 | number: 0}}%
+          <th>
+            <!-- Total.  Total / All
+              ${{cH.getTotal(day.transactions, "price") | number: 0}} {{cH.getTotal(day.transactions, "price") /
+              cH.getTotal(transactions,
+              "price") * 100 | number: 0}}%
+            -->
           </th>
         </tr>
         <!-- Transactions -->
@@ -74,13 +81,15 @@
           </td>
           <td ng-click="fillTransactionInfo(trans, $event);" class="nameTd">{{trans.name}}</td>
           <td>
-            ${{trans.price}}
+            $ {{trans.price}}
           </td>
           <td>
-            {{trans.sold}}
-            <span ng-class="(trans.sold - trans.price > 0) ? 'profit' : 'loss'" class="pull-right">
-              {{trans.sold - trans.price}}
-            </span>
+            <!-- Removing sold if seller.  Sold + Flip
+              {{trans.sold}}
+              <span ng-class="(trans.sold - trans.price > 0) ? 'profit' : 'loss'" class="pull-right">
+                {{trans.sold - trans.price}}
+              </span>
+            -->
           </td>
           <td class="tag" id="{{trans._id.$oid}}">
             {{populateTags(trans)}}
@@ -93,29 +102,53 @@
         </tr>
         <tr class="date-footer">
           <td>
-            {{day.monthYear}} {{cH}}
+            {{day.monthYear}} Totals:
+            <!-- {{cH}} -->
           </td>
           <td>
+              {{day.transactions.length}} item<span ng-if="day.transactions.length > 1">s</span>
           </td>
           <td>
-            Total: ${{cH.getTotal(day.transactions, "price") | number: 2}}
-            <br>{{day.transactions.length}} items
-            <br> ${{cH.getTotal(day.transactions, "price")/day.transactions.length | number: 2}}
+            Total: $ {{cH.getTotal(day.transactions, "price") | number: 2}}
+            <br> 
+            <span ng-if="day.transactions.length > 1">Avg Price: ${{cH.getTotal(day.transactions, "price")/day.transactions.length | number: 2}}</span>
           </td>
           <td>
-            Sold: ${{cH.getTotal(day.transactions, "sold") | number: 2}}
-            <span class="pull-right">{{cH.getSoldCount(day.transactions)}}</span>
+            <!-- Sold.  Enable if Seller Profile.
+              Sold: ${{cH.getTotal(day.transactions, "sold") | number: 2}}
+              <span class="pull-right">{{cH.getSoldCount(day.transactions)}}</span>
+            -->
           </td>
-          <td ng-class="( (cH.getNetPrice(day.transactions) > 0) ? 'profit' : 'loss')">
-            Net: ${{cH.getNetPrice(day.transactions) | number: 2}}
+          <!-- Show Net Price.  Green+/Red-  Enable if seller profile.
+              <td ng-class="( (cH.getNetPrice(day.transactions) > 0) ? 'profit' : 'loss')">
+              Net: ${{cH.getNetPrice(day.transactions) | number: 2}}
+              </td> 
+          -->
+          <td>
+            <!-- Put in Tags Here.  Expand. -->
+            <table>
+              <tr ng-repeat="tag in day.tags" class="tagData-row">
+                <td class="col-xs-4 tag">
+                  {{getKeyByValue(day.tags, tag)}}
+                </td>
+                <td class="col-xs-4">
+                    {{cH.getTotal(tag, "price")}}
+                </td>
+                <td class="col-xs-4">
+                    {{tag.length}}
+                </td>
+              </tr>
+            </table>
           </td>
           <td>
-            ${{cH.getTotal(day.transactions, "price") | number: 0}} {{cH.getTotal(day.transactions, "price") /
-            cH.getTotal(transactions,
-            "price") * 100 | number: 0}}%
-            <span class="pull-right">
-              Total: {{ cH.getTotal(transactions, "price") | number: 2}}
-            </span>
+            <!-- Day price.  % of All Transactions.  Total            
+              ${{cH.getTotal(day.transactions, "price") | number: 0}} {{cH.getTotal(day.transactions, "price") /
+              cH.getTotal(transactions,
+              "price") * 100 | number: 0}}%
+              <span class="pull-right">
+                Total: {{ cH.getTotal(transactions, "price") | number: 2}}
+              </span> 
+            -->
           </td>
         </tr>
         <tr ng-repeat="tag in day.tags" class="tagData-row">
