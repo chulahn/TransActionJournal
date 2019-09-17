@@ -1,0 +1,12 @@
+
+Todo:
+  ☐ Make Visually appealing @created(09-17-19 13:46)
+
+  ☐ Make User Registration Modal, get from EJ @created(09-17-19 14:21)
+  ☐ Create Users Table @created(09-17-19 13:46)
+  ☐ Assign userId when creating an Transaction @created(09-17-19 13:47)
+
+  ☐ Make a Tutorial Video @created(09-17-19 13:47)
+    ☐ Check if first time by Cookie.  Then show modal video.  @created(09-17-19 13:47)
+  
+    ☐ Use ENV.Var @created(09-17-19 14:22)
