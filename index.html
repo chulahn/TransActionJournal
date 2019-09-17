@@ -102,7 +102,7 @@
         </tr>
         <tr class="date-footer">
           <td>
-            {{day.monthYear}} Totals:
+            <b>{{day.monthYear}} Totals:</b>
             <!-- {{cH}} -->
           </td>
           <td>
@@ -149,18 +149,6 @@
                 Total: {{ cH.getTotal(transactions, "price") | number: 2}}
               </span> 
             -->
-          </td>
-        </tr>
-        <tr ng-repeat="tag in day.tags" class="tagData-row">
-          <td></td>
-          <td class="tag">
-            {{getKeyByValue(day.tags, tag)}}
-          </td>
-          <td>
-            {{cH.getTotal(tag, "price")}}
-          </td>
-          <td>
-            {{tag.length}}
           </td>
         </tr>
       </tbody>
@@ -259,8 +247,8 @@
       // console.log($(this));
 
       var tagName = $(this).html().trimStart().trimEnd();
-      var $monthYear = $(this).closest('tbody');
-      var $tags = $(this).closest('tbody').find(".tag");
+      var $monthYear = $(this).closest('tbody').parent().closest('tbody');
+      var $tags = $(this).closest('tbody').parent().closest('tbody').closest('tbody').find(".tag");
       // console.log($tags);
       // console.log($tags[0]);
       // console.log($($tags[0]));
