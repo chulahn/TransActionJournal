@@ -102,7 +102,7 @@
         </tr>
         <tr class="date-footer">
           <td>
-            <b>{{day.monthYear}} Totals:</b>
+            <b><span style="font-size: 16px">{{day.monthYear}} Totals:</span></b>
             <!-- {{cH}} -->
           </td>
           <td>
@@ -167,22 +167,22 @@
           </td>
           {{$parse(flip = cH.getOverallFlip(transactions))}}
           <td>
-            Sold: {{cH.getTotal(transactions, "sold")}} {{flip.count}}
+            <!-- Sold: {{cH.getTotal(transactions, "sold")}} {{flip.count}}
             <br /> Cost: {{flip.sum}} {{}}
             <br /> Flip: {{cH.getTotal(transactions, "sold") - flip.sum | number: 2 }}
-            <br />
+            <br /> -->
           </td>
           <td>
-            <span ng-class="(getProfit() > 0) ? 'profit' : 'loss'">Net: {{getProfit() | number: 2}}</span>
+            <!-- <span ng-class="(getProfit() > 0) ? 'profit' : 'loss'">Net: {{getProfit() | number: 2}}</span> -->
           </td>
           <td></td>
         </tr>
       </tbody>
     </table>
 
-    <section id="bottomSection">
+    <!-- <section id="bottomSection">
       Statistics
-    </section>
+    </section> -->
   </div>
   <footer id="addTransactionContainer">
     <table class="table table-condensed table-bordered table-striped">
@@ -191,7 +191,8 @@
           <td class="col-xs-2">Date</td>
           <td class="col-xs-2">Name</td>
           <td class="col-xs-2">Price</td>
-          <td class="col-xs-2">Sold</td>
+          <td class="col-xs-2"></td>
+          <!-- <td class="col-xs-2">Sold</td> -->
           <td class="col-xs-3">Tag</td>
           <td class="col-xs-1">Action</td>
         </tr>
@@ -211,7 +212,7 @@
             <input id="price" ng-model="price" placeholder="Item Price">
           </td>
           <td class="col-xs-2">
-            <input id="sold" ng-model="sold" placeholder="Sold Price">
+            <!-- <input id="sold" ng-model="sold" placeholder="Sold Price"> -->
           </td>
           <td class="col-xs-3">
             <input id="tags" ng-model="tags" placeholder="Tags">
