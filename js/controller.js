@@ -76,14 +76,19 @@ app.controller("dataController", [
 
     $scope.getDBTransactions();
 
+    //End App Initialization
+
+
+    //CRUD Actions.
     /* 
-      $scope.convertData(data) : Make a seprate array that each element is a Day with transactions.  Days have tags
+      $scope.convertData(data) : Make a seprate "days" array that each element is a Day with transactions.  Days have tags
       @params data : {_id: {…}, name: "Crota", price: "9.99", sold: "49.99", date: "2017-11-01T16:46:44.895Z", …}
         
         convertedData : { 11/2017 : {date: Wed Nov 01 2017 12:46:44 GMT-0400 (Eastern Daylight Time), monthYear: "11/2017", transactions: Array(11), $$hashKey: "object:5"}}
 
         days : [{date: Wed Nov 01 2017 12:46:44 GMT-0400 (Eastern Daylight Time), monthYear: "11/2017", transactions: Array(11), $$hashKey: "object:5"}]
 
+      Called after $scope.getDBTransactions, so that data is formatted and able to displayed on template.
     */
     $scope.convertData = function(data) {
       var monthYearObject = {};
@@ -176,7 +181,7 @@ app.controller("dataController", [
       });
     };
 
-    // Private method that creates object with properties from $scope.inputs.  Passes this object to DB
+    // Private method that creates a "Transaction" object with properties from $scope.inputs.  Passes this object to DB
     // {}.name , .price, .sold, .date, .tags
     // Used in addItem/updateItem
     function composeTransaction() {
@@ -479,6 +484,8 @@ app.controller("dataController", [
         console.log("deleteItem: not deleting");
       }
     };
+
+    //End CRUD Methods.
 
     // Count flip count and investment.  Add transaction when sold has a value.
     $scope.getOverallFlip = function() {
