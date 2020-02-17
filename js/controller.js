@@ -78,7 +78,6 @@ app.controller("dataController", [
 
     //End App Initialization
 
-
     //CRUD Actions.
     /* 
       $scope.convertData(data) : Make a seprate "days" array that each element is a Day with transactions.  Days have tags
@@ -243,7 +242,7 @@ app.controller("dataController", [
 
       $.ajax({
         url:
-          "https://api.mlab.com/api/1/databases/eyecoin/collections/demo?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws",
+          "https://api.mlab.com/api/1/databases/eyecoin/collections/demo?apiKey=UuYuAwtnxKgGwkMCoXD3rzhfvdoddX0u",
         data: JSON.stringify(itemToAdd),
         type: "POST",
         contentType: "application/json"
