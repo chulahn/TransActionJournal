@@ -484,6 +484,24 @@ app.controller("dataController", [
       }
     };
 
+    // Private method to create a User object from input, pass to createUser
+    function composeUser() {
+      var newUser = {};
+      newUser.name = $scope.name;
+      newUser.email = $scope.email;
+      newUser.password = $scope.password;
+
+      return newUser;
+    }
+
+    $scope.createUser = function() {
+      var newUser = composeUser();
+
+      function checkEmail() {
+        //POST REQUEST .toLowerCase();
+      }
+      //make POST REQUEST WITH INFO
+    };
     //End CRUD Methods.
 
     // Count flip count and investment.  Add transaction when sold has a value.
