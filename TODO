@@ -1,12 +1,32 @@
+Next:
+Create Backend.
+Host on Heroku.
+Start and Finalize CreateUser
+
 
 Todo:
   ☐ Make Visually appealing @created(09-17-19 13:46)
 
-  ☐ Make User Registration Modal, get from EJ @created(09-17-19 14:21)
-  ☐ Create Users Table @created(09-17-19 13:46)
+  ☐ Create User Post Request @created(Mon 02/17/2020 - 02:57 AM) 
+      check if email has been registered.
+   ☐ Write a server backend @created(Mon 02/17/2020 - 02:57 AM)
+    ☐ Host it on Heroku @created(Mon 02/17/2020 - 02:57 AM)
+
   ☐ Assign userId when creating an Transaction @created(09-17-19 13:47)
 
   ☐ Make a Tutorial Video @created(09-17-19 13:47)
     ☐ Check if first time by Cookie.  Then show modal video.  @created(09-17-19 13:47)
   
     ☐ Use ENV.Var @created(09-17-19 14:22)
+
+
+2/17 2:59
+Created Login / Register Modal
+Created NavBar.
+Added Css to inputs.
+Added angular to Modal.
+
+✔ Make User Registration Modal, get from EJ @created(09-17-19 14:21) @done(Mon 02/17/2020 - 02:56 AM)
+✔ Create Users Table @created(09-17-19 13:46) @done(Mon 02/17/2020 - 02:56 AM)
+    name, email, password, createDate
+
