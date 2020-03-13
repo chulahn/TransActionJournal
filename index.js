@@ -95,7 +95,7 @@ app.post("/trans", function(req, res) {
       console.log("app.post('/trans' : Connected to client");
 
       var db = client.db("eyecoin"); //change name
-      var transactionCollection = db.collection("transactions"); //hcange name
+      var transactionCollection = db.collection("demo"); //hcange name
 
       var passedTransObject = req.body;
 

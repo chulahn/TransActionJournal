@@ -241,8 +241,7 @@ app.controller("dataController", [
       console.log("addItem: itemToAdd ", itemToAdd);
 
       $.ajax({
-        url:
-          "https://api.mlab.com/api/1/databases/eyecoin/collections/demo?apiKey=UuYuAwtnxKgGwkMCoXD3rzhfvdoddX0u",
+        url: "/trans",
         data: JSON.stringify(itemToAdd),
         type: "POST",
         contentType: "application/json"
