@@ -1,5 +1,5 @@
 Next:
-Create Backend.
+Test Backend
 Host on Heroku.
 Start and Finalize CreateUser
 
@@ -19,6 +19,8 @@ Todo:
   
     ☐ Use ENV.Var @created(09-17-19 14:22)
 
+3/13 2:13
+Created Backend
 
 2/17 2:59
 Created Login / Register Modal
