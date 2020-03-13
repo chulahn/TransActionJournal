@@ -26,6 +26,14 @@ app.get("/css/index.css", function(req, res) {
   res.sendfile("css/index.css");
 });
 
+app.get("/js/angular-bootstrap-calendar.js", function(req, res) {
+  res.sendfile("js/angular-bootstrap-calendar.js");
+});
+
+app.get("/js/factory.js", function(req, res) {
+  res.sendfile("js/factory.js");
+});
+
 app.get("/js/controller.js", function(req, res) {
   res.sendfile("js/controller.js");
 });
