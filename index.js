@@ -22,7 +22,7 @@ app.get("/", function(req, res) {
   res.sendfile("index.html");
 });
 
-app.get("/index.css", function(req, res) {
+app.get("/css/index.css", function(req, res) {
   res.sendfile("css/index.css");
 });
 
@@ -39,8 +39,8 @@ app.get("/users", function(req, res) {
     if (client) {
       console.log("app.get('/ex' : Connected to client");
 
-      var db = client.db("exercise-journal");  // change to DB name
-      var userCollection = db.collection("workouts");  // change to Collection name
+      var db = client.db("exercise-journal"); // change to DB name
+      var userCollection = db.collection("workouts"); // change to Collection name
 
       userCollection.find({}).toArray(function(err, results) {
         if (results) {
@@ -55,26 +55,28 @@ app.get("/users", function(req, res) {
   });
 });
 
-app.get("/user/:userId", function(req, res)) {
+app.get("/user/:userId", function(req, res) {
   MongoClient.connect(databaseURL, function(err, client) {
     if (client) {
       console.log("app.get('/ex' : Connected to client");
-  
-      var db = client.db("exercise-journal");  // change to DB name
-      var transactionCollection = db.collection("workouts");  // change to Collection name
-  
-      transactionCollection.find({ userId: userId }).toArray(function(err, results) {
-        if (results) {
-          console.log(results);
-          res.send(results);
-        }
-      });
+
+      var db = client.db("eyecoin");
+      var transactionCollection = db.collection("users"); // Users does not exist yet.
+
+      transactionCollection
+        .find({ userId: userId })
+        .toArray(function(err, results) {
+          if (results) {
+            console.log(results);
+            res.send(results);
+          }
+        });
     } else {
       console.log("Error connecting to Database");
       console.log(err);
     }
   });
-}
+});
 
 // POST REQUEST : create User, create Transaction.  update User, update Transaction , delete
 
@@ -82,32 +84,28 @@ app.get("/user/:userId", function(req, res)) {
 app.post("/trans", function(req, res) {
   MongoClient.connect(databaseURL, function(err, client) {
     if (client) {
-      console.log("app.post('/ex' : Connected to client");
+      console.log("app.post('/trans' : Connected to client");
 
-      var db = client.db("exercise-journal");  //change name
-      var transactionCollection = db.collection("workouts");  //hcange name
-
+      var db = client.db("eyecoin"); //change name
+      var transactionCollection = db.collection("transactions"); //hcange name
 
       var passedTransObject = req.body;
 
       //get length of transaction collection
-      passedTransObject.id = length
+      passedTransObject.id = transactionCollection.count();
 
-      console.log(req.body);
+      console.log(passedTransObject);
       transactionCollection.insert(req.body, function(err, results) {
-        if (err) {
-          console.log("Insert workout error");
-          console.log(err);
-          res.status(400).send(err);
-        } else {
-          console.log("Successful insert");
-          console.log(results);
+        if (!err) {
+          console.log("Successful insert", results);
           res.send(req.body);
+        } else {
+          console.log("Insert transaction error", err);
+          res.status(400).send(err);
         }
       });
     } else {
-      console.log("Error connecting to Database");
-      console.log(err);
+      console.log("Error connecting to Database", err);
     }
   });
 });
@@ -118,7 +116,7 @@ app.post("/trans/:transId", function(req, res) {
     if (client) {
       console.log("app.post('/update/:transId' : Connected to client");
 
-      var db = client.db("exercise-journal");  // change db name
+      var db = client.db("exercise-journal"); // change db name
       var transactionCollection = db.collection("workouts"); // change collection name
 
       var copy = req.body;
@@ -153,7 +151,7 @@ app.post("/delete/trans/:transId", function(req, res) {
       console.log("app.post('/delete/:transId' : Connected to client");
 
       var db = client.db("exercise-journal"); //change names
-      var workoutCollection = db.collection("workouts");   //change name
+      var workoutCollection = db.collection("workouts"); //change name
 
       var o_id = new ObjectId(req.params.transId);
 
@@ -174,7 +172,6 @@ app.post("/delete/trans/:transId", function(req, res) {
     }
   });
 });
-
 
 // Create User
 app.post("/register", function(req, res) {
