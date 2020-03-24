@@ -118,7 +118,40 @@ app.post("/trans", function(req, res) {
   });
 });
 
-// Update a workout.  Called when Updating, or resyncing.  User is same.
+//Create User.  Pseudocode now
+app.post("/register", function(req, res) {
+  MongoClient.connect(databaseURL, function(err, client) {
+    if (client) {
+      console.log("app.post('/register' : Connected to client");
+
+      var db = client.db("eyecoin"); //change name
+      var userCollect = db.collection("users"); //hcange name
+
+      var passedUserObject = req.body;
+
+      //get length of transaction collection
+      passedUserObject.id = userCollection.count();
+
+      console.log(passedUserObject);
+
+      //if Find by passedUserObject.email .length == 0
+
+      userCollection.insert(req.body, function(err, results) {
+        if (!err) {
+          console.log("Successful insert", results);
+          res.send(req.body);
+        } else {
+          console.log("Insert transaction error", err);
+          res.status(400).send(err);
+        }
+      });
+    } else {
+      console.log("Error connecting to Database", err);
+    }
+  });
+});
+
+// Update a transaction.  Called when Updating, or resyncing.  User is same.
 app.post("/trans/:transId", function(req, res) {
   MongoClient.connect(databaseURL, function(err, client) {
     if (client) {
