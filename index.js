@@ -45,10 +45,10 @@ app.get("/js/controller.js", function(req, res) {
 app.get("/users", function(req, res) {
   MongoClient.connect(databaseURL, function(err, client) {
     if (client) {
-      console.log("app.get('/ex' : Connected to client");
+      console.log("app.get('/users' : Connected to client");
 
-      var db = client.db("exercise-journal"); // change to DB name
-      var userCollection = db.collection("workouts"); // change to Collection name
+      var db = client.db("eyecoin"); // change to DB name
+      var userCollection = db.collection("users"); // change to Collection name
 
       userCollection.find({}).toArray(function(err, results) {
         if (results) {
@@ -125,26 +125,35 @@ app.post("/register", function(req, res) {
       console.log("app.post('/register' : Connected to client");
 
       var db = client.db("eyecoin"); //change name
-      var userCollect = db.collection("users"); //hcange name
+      var userCollection = db.collection("users"); //hcange name
 
       var passedUserObject = req.body;
-
-      //get length of transaction collection
-      passedUserObject.id = userCollection.count();
+      //email
+      //password
+      //createdDate
 
       console.log(passedUserObject);
 
-      //if Find by passedUserObject.email .length == 0
+      userCollection.find({}).toArray(function(err, results) {
+        if (results) {
+          passedUserObject.id = results.length;
 
-      userCollection.insert(req.body, function(err, results) {
-        if (!err) {
-          console.log("Successful insert", results);
-          res.send(req.body);
-        } else {
-          console.log("Insert transaction error", err);
-          res.status(400).send(err);
+          userCollection.insert(req.body, function(err, results) {
+            if (!err) {
+              console.log("Successful insert", results);
+              res.send(req.body);
+            } else {
+              console.log("Insert transaction error", err);
+              res.status(400).send(err);
+            }
+          });
         }
       });
+
+      //get length of transaction collection
+      // passedUserObject.id = userCollection.countDocuments();
+
+      //TODO: if Find by passedUserObject.email .length == 0
     } else {
       console.log("Error connecting to Database", err);
     }
@@ -207,87 +216,6 @@ app.post("/delete/trans/:transId", function(req, res) {
           res.send(results);
         }
       });
-    } else {
-      console.log("Error connecting to Database");
-      console.log(err);
-    }
-  });
-});
-
-// Create User
-app.post("/register", function(req, res) {
-  //First connect to the database,
-  //Check if email is in use.  transform to lowercase, then find match
-  //check username.  find match
-  //Get length, assign Id to newUser
-  //Add User to DB.
-  MongoClient.connect(databaseURL, function(err, client) {
-    if (client) {
-      console.log("app.post('/register' :  Register");
-
-      var db = client.db("exercise-journal");
-      var userCollection = db.collection("users");
-      console.log(req.body);
-      //if invalid email is entered, body does not send it.
-
-      var b = userCollection
-        .find({
-          email: req.body.email
-        })
-        .toArray(function(err, results) {
-          var emailExists = results.length > 0;
-
-          if (emailExists) {
-            // cannot register
-            //TODO: update client and give feedback that couldnt Register
-            console.log(req.body.email, "exists");
-            res.status(401).send("Email already Exists");
-          } else {
-            console.log("Checking if username in use");
-
-            var d = userCollection
-              .find({
-                user_name: req.body.user_name
-              })
-              .toArray(function(err, dResults) {
-                var userNameExists = dResults.length > 0;
-
-                if (userNameExists) {
-                  // cannot register
-                  console.log(req.body.user_name, " user_name exists");
-                  res.status(402).send("Email already Exists");
-                } else {
-                  var newUser = {};
-
-                  userCollection.find({}).toArray(function(err, allUsers) {
-                    newUser.id = allUsers.length;
-                    newUser.user_name = req.body.user_name;
-                    // TODO: Salt password
-                    newUser.password = req.body.password;
-                    newUser.email = req.body.email;
-                    newUser.created = new Date();
-
-                    userCollection.insert(newUser, function(
-                      insertErr,
-                      insertResults
-                    ) {
-                      if (insertErr) {
-                        console.log("Insert workout error");
-                        console.log(insertErr);
-                        res.status(400).send(insertErr);
-                      } else {
-                        console.log("Successful insert");
-                        console.log(insertResults);
-                        //Redirect to logged in
-                        res.send(req.body);
-                      }
-                    });
-                  });
-                }
-                console.log(dResults, "dResults");
-              });
-          }
-        });
     } else {
       console.log("Error connecting to Database");
       console.log(err);
