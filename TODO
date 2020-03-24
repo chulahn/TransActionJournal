@@ -1,5 +1,6 @@
 Next:
-Test Backend
+Create Transaction with current userId based on loggedIn Cookie / (JWT).
+
 Update methods to use backend instead of mlab
 Host on Heroku.
 Start and Finalize CreateUser
@@ -7,9 +8,6 @@ Start and Finalize CreateUser
 Protected Routes
 
 Todo:
-  ☐ Create User Post Request @created(Mon 02/17/2020 - 02:57 AM) 
-      check if email has been registered.
-   ✔ Write a server backend @created(Mon 02/17/2020 - 02:57 AM) @done(Tue 03/24/2020 - 02:47 PM)
     ☐ Host it on Heroku @created(Mon 02/17/2020 - 02:57 AM)
 
   ☐ Create Protected Routes @created(Tue 03/24/2020 - 02:46 PM)
@@ -24,8 +22,16 @@ Todo:
   
     ☐ Use ENV.Var @created(09-17-19 14:22)
 
+3/24 17:45
+Test Backend
+✔ Create User Post Request @created(Mon 02/17/2020 - 02:57 AM) @done(Tue 03/24/2020 - 05:44 PM)
+  ✔ check if email has been registered. @created(Tue 03/24/2020 - 05:44 PM) @done(Tue 03/24/2020 - 05:44 PM)
+
+
 3/13 2:13
 Created Backend
+  ✔ Write a server backend @created(Mon 02/17/2020 - 02:57 AM) @done(Tue 03/24/2020 - 02:47 PM)
+
 
 2/17 2:59
 Created Login / Register Modal
