@@ -118,7 +118,7 @@ app.post("/trans", function(req, res) {
   });
 });
 
-//Create User.  Pseudocode now
+//Create User.
 app.post("/register", function(req, res) {
   MongoClient.connect(databaseURL, function(err, client) {
     if (client) {
@@ -128,21 +128,19 @@ app.post("/register", function(req, res) {
       var userCollection = db.collection("users"); //hcange name
 
       var passedUserObject = req.body;
-      //email
-      //password
-      //createdDate
+      passedUserObject.createdDate = new Date();
 
       console.log(passedUserObject);
 
-      //Basically assuming a new user
+      //Check to see if the email exists
       userCollection
         .find({ email: passedUserObject.email.toLowerCase() })
         .toArray(function(err, results) {
           if (results.length == 0) {
+            //If not Insert
             userCollection.find({}).toArray(function(err, results) {
               if (results) {
                 passedUserObject.id = results.length;
-
                 userCollection.insert(req.body, function(err, results) {
                   if (!err) {
                     console.log("Successful insert", results);
@@ -158,11 +156,6 @@ app.post("/register", function(req, res) {
             console.log(passedUserObject.email, " already exists, not added");
           }
         });
-
-      //get length of transaction collection
-      // passedUserObject.id = userCollection.countDocuments();
-
-      //TODO: if Find by passedUserObject.email .length == 0
     } else {
       console.log("Error connecting to Database", err);
     }
