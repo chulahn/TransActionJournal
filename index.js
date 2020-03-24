@@ -134,21 +134,30 @@ app.post("/register", function(req, res) {
 
       console.log(passedUserObject);
 
-      userCollection.find({}).toArray(function(err, results) {
-        if (results) {
-          passedUserObject.id = results.length;
+      //Basically assuming a new user
+      userCollection
+        .find({ email: passedUserObject.email.toLowerCase() })
+        .toArray(function(err, results) {
+          if (results.length == 0) {
+            userCollection.find({}).toArray(function(err, results) {
+              if (results) {
+                passedUserObject.id = results.length;
 
-          userCollection.insert(req.body, function(err, results) {
-            if (!err) {
-              console.log("Successful insert", results);
-              res.send(req.body);
-            } else {
-              console.log("Insert transaction error", err);
-              res.status(400).send(err);
-            }
-          });
-        }
-      });
+                userCollection.insert(req.body, function(err, results) {
+                  if (!err) {
+                    console.log("Successful insert", results);
+                    res.send(req.body);
+                  } else {
+                    console.log("Insert transaction error", err);
+                    res.status(400).send(err);
+                  }
+                });
+              }
+            });
+          } else {
+            console.log(passedUserObject.email, " already exists, not added");
+          }
+        });
 
       //get length of transaction collection
       // passedUserObject.id = userCollection.countDocuments();
