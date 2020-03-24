@@ -4,16 +4,20 @@ Update methods to use backend instead of mlab
 Host on Heroku.
 Start and Finalize CreateUser
 
+Protected Routes
 
 Todo:
-  ☐ Make Visually appealing @created(09-17-19 13:46)
-
   ☐ Create User Post Request @created(Mon 02/17/2020 - 02:57 AM) 
       check if email has been registered.
-   ☐ Write a server backend @created(Mon 02/17/2020 - 02:57 AM)
+   ✔ Write a server backend @created(Mon 02/17/2020 - 02:57 AM) @done(Tue 03/24/2020 - 02:47 PM)
     ☐ Host it on Heroku @created(Mon 02/17/2020 - 02:57 AM)
 
+  ☐ Create Protected Routes @created(Tue 03/24/2020 - 02:46 PM)
+    Get / Update / Delete
+
   ☐ Assign userId when creating an Transaction @created(09-17-19 13:47)
+
+  ☐ Make Visually appealing @created(09-17-19 13:46)
 
   ☐ Make a Tutorial Video @created(09-17-19 13:47)
     ☐ Check if first time by Cookie.  Then show modal video.  @created(09-17-19 13:47)
