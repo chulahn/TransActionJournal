@@ -118,7 +118,7 @@ app.post("/trans", function(req, res) {
   });
 });
 
-//Create User.
+//Create User.  {}.email , password, id
 app.post("/register", function(req, res) {
   MongoClient.connect(databaseURL, function(err, client) {
     if (client) {
@@ -158,6 +158,38 @@ app.post("/register", function(req, res) {
         });
     } else {
       console.log("Error connecting to Database", err);
+    }
+  });
+});
+
+//Login User
+app.post("/login", function(req, res) {
+  //look up username in db,
+  MongoClient.connect(databaseURL, function(err, client) {
+    if (client) {
+      console.log("app.post('/register' : Connected to client");
+
+      var db = client.db("eyecoin"); //change name
+      var userCollection = db.collection("users"); //hcange name
+
+      var passedUserObject = req.body;
+
+      console.log(passedUserObject);
+
+      userCollection
+        .find({ email: passedUserObject.email.toLowerCase() })
+        .toArray(function(err, results) {
+          if (results.length > 0) {
+            if (results[0].password == passedUserObject.password) {
+              //Reload page on client end, with a JWT Token (currently fake String saved as Cookie)
+              res.json({ token: "tHiSi$ToKeN" });
+            } else {
+              res.json({ error: "failed Login to " + passedUserObject.email });
+            }
+          } else {
+            res.json({ error: "no such user " + passedUserObject.email });
+          }
+        });
     }
   });
 });
