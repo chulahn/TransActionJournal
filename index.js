@@ -181,6 +181,9 @@ app.post("/login", function(req, res) {
 
       var passedUserObject = req.body;
 
+      passedUserObject.loggedIn = passedUserObject.loggedIn || [];
+      passedUserObject.loggedIn.push(new Date());
+
       console.log(passedUserObject);
 
       userCollection

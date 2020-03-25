@@ -28,6 +28,8 @@ app.controller("dataController", [
       $scope.transactions = transactionLog;
     }
 
+    $scope.loginMode = true;
+
     // Called after addItem, deletingItem, updateItem, or updatingItemTags.
     // Get transactions from database, and set as $scope data.
     $scope.getDBTransactions = function() {
@@ -495,8 +497,6 @@ app.controller("dataController", [
 
     $scope.createUser = function() {
       var newUser = composeUser();
-
-      //TODO: Fix the CORS Header
       $.ajax({
         url: "/register",
         data: JSON.stringify(newUser),
@@ -510,7 +510,37 @@ app.controller("dataController", [
       });
       //make POST REQUEST WITH INFO
     };
+
+    $scope.login = function() {
+      var newUser = composeUser();
+      delete newUser.usersName; //trim unnecessary info for now.  REMOVE LATER
+
+      $.ajax({
+        url: "/login",
+        data: JSON.stringify(newUser),
+        type: "POST",
+        contentType: "application/json"
+      }).done(function(data) {
+        console.log(data);
+        $scope.$apply(function() {
+          console.log("apply");
+        });
+      });
+    };
     //End CRUD Methods.
+
+    $scope.toggleLogin = function() {
+      $scope.loginMode = !$scope.loginMode;
+
+      // register
+      if (!$scope.loginMode) {
+        $scope.deleteMode = true;
+      }
+
+      if ($scope.loginMode) {
+        $scope.deleteMode = false;
+      }
+    };
 
     // Count flip count and investment.  Add transaction when sold has a value.
     $scope.getOverallFlip = function() {

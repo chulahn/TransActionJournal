@@ -79,10 +79,10 @@
           <div>
             <!-- Nav tabs -->
             <ul class="nav nav-tabs" role="tablist">
-              <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab"
-                  data-toggle="tab">Login</a></li>
-              <li role="presentation"><a href="#register" aria-controls="profile" role="tab"
-                  data-toggle="tab">Register</a></li>
+              <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab"
+                  ng-click="toggleLogin()">Login</a></li>
+              <li role="presentation"><a href="#register" aria-controls="profile" role="tab" data-toggle="tab"
+                  ng-click="toggleLogin()">Register</a></li>
             </ul>
 
             <!-- Tab panes -->
@@ -103,7 +103,8 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary" ng-click="createUser()">Login</button>
+          <button type="button" class="btn btn-primary" ng-if="loginMode" ng-click="login()">Login</button>
+          <button type="button" class="btn btn-primary" ng-if="!loginMode" ng-click="createUser()">Register</button>
         </div>
       </div>
     </div>
