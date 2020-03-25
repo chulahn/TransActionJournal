@@ -18,20 +18,10 @@ app.use(
 app.use(express.json()); // to support JSON-encoded bodies
 app.use(express.urlencoded()); // to support URL-encoded bodies
 
-var allowCrossDomain = function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-  res.header("Access-Control-Allow-Headers", "Content-Type");
-  next();
-};
+var cors = require("cors");
 
-app.use(allowCrossDomain);
-
-app.all("/*", function(req, res, next) {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Headers", "X-Requested-With");
-  next();
-});
+app.use(cors({ credentials: true, origin: true }));
+app.options("*", cors());
 
 app.get("/", function(req, res) {
   res.sendfile("index.html");
@@ -147,30 +137,32 @@ app.post("/register", function(req, res) {
 
       console.log(passedUserObject);
 
-      //Check to see if the email exists
-      userCollection
-        .find({ email: passedUserObject.email.toLowerCase() })
-        .toArray(function(err, results) {
-          if (results.length == 0) {
-            //If not Insert
-            userCollection.find({}).toArray(function(err, results) {
-              if (results) {
-                passedUserObject.id = results.length;
-                userCollection.insert(req.body, function(err, results) {
-                  if (!err) {
-                    console.log("Successful insert", results);
-                    res.send(req.body);
-                  } else {
-                    console.log("Insert transaction error", err);
-                    res.status(400).send(err);
-                  }
-                });
-              }
-            });
-          } else {
-            console.log(passedUserObject.email, " already exists, not added");
-          }
-        });
+      if (passedUserObject && passedUserObject.email) {
+        //Check to see if the email exists
+        userCollection
+          .find({ email: passedUserObject.email.toLowerCase() })
+          .toArray(function(err, results) {
+            if (results.length == 0) {
+              //If not Insert
+              userCollection.find({}).toArray(function(err, results) {
+                if (results) {
+                  passedUserObject.id = results.length;
+                  userCollection.insert(req.body, function(err, results) {
+                    if (!err) {
+                      console.log("Successful insert", results);
+                      res.send(req.body);
+                    } else {
+                      console.log("Insert transaction error", err);
+                      res.status(400).send(err);
+                    }
+                  });
+                }
+              });
+            } else {
+              console.log(passedUserObject.email, " already exists, not added");
+            }
+          });
+      }
     } else {
       console.log("Error connecting to Database", err);
     }

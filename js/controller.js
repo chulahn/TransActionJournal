@@ -498,11 +498,8 @@ app.controller("dataController", [
 
       //TODO: Fix the CORS Header
       $.ajax({
-        beforeSend: function(xhr) {
-          xhr.setRequestHeader("x-Trigger: CORS", "Content-Type");
-        },
-        url: "localhost:3000/register",
-        data: JSON.stringify({ $set: newUser }),
+        url: "/register",
+        data: JSON.stringify(newUser),
         type: "POST",
         contentType: "application/json"
       }).done(function(data) {

@@ -4,7 +4,7 @@
   "description": "An app to track your transactions",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -15,12 +15,10 @@
   "bugs": {
     "url": "https://github.com/chulahn/TransActionJournal/issues"
   },
-  "scripts": {
-    "start": "nodemon index.js"
-  },
   "homepage": "https://github.com/chulahn/TransActionJournal#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "express": "^4.17.1",
     "mongodb": "^3.5.5"
   }
