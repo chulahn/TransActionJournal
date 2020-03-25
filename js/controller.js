@@ -496,9 +496,20 @@ app.controller("dataController", [
     $scope.createUser = function() {
       var newUser = composeUser();
 
-      function checkEmail() {
-        //POST REQUEST .toLowerCase();
-      }
+      $.ajax({
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader("x-Trigger: CORS", "some value");
+        },
+        url: "localhost:3000/register",
+        data: JSON.stringify({ $set: newUser }),
+        type: "PUT",
+        contentType: "application/json"
+      }).done(function(data) {
+        console.log(data);
+        $scope.$apply(function() {
+          console.log("apply");
+        });
+      });
       //make POST REQUEST WITH INFO
     };
     //End CRUD Methods.
