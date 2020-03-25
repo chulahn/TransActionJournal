@@ -1,12 +1,10 @@
 Next:
-Create separate Login, based on Register
-and on success of that login function, get object passed from backend, and store cookie with userId.
+On success of that login function, get JWT, and store cookie with userId.
 
 Create Transaction with current userId based on loggedIn Cookie / (JWT).
 
-Update methods to use backend instead of mlab
+Update ALL methods to use backend instead of mlab
 Host on Heroku.
-Start and Finalize CreateUser
 
 Protected Routes
 
@@ -24,6 +22,10 @@ Todo:
     ☐ Check if first time by Cookie.  Then show modal video.  @created(09-17-19 13:47)
   
     ☐ Use ENV.Var @created(09-17-19 14:22)
+
+3/25 19:21
+Log In, and reject on wrong password.
+Switch between Login and Register tabs.
 
 3/25 18:52
 Linked Front-to-Back Register.
