@@ -486,7 +486,7 @@ app.controller("dataController", [
     // Private method to create a User object from input, pass to createUser
     function composeUser() {
       var newUser = {};
-      newUser.name = $scope.name;
+      newUser.name = $scope.usersName;
       newUser.email = $scope.email;
       newUser.password = $scope.password;
 
@@ -496,13 +496,14 @@ app.controller("dataController", [
     $scope.createUser = function() {
       var newUser = composeUser();
 
+      //TODO: Fix the CORS Header
       $.ajax({
         beforeSend: function(xhr) {
-          xhr.setRequestHeader("x-Trigger: CORS", "some value");
+          xhr.setRequestHeader("x-Trigger: CORS", "Content-Type");
         },
         url: "localhost:3000/register",
         data: JSON.stringify({ $set: newUser }),
-        type: "PUT",
+        type: "POST",
         contentType: "application/json"
       }).done(function(data) {
         console.log(data);
