@@ -195,7 +195,9 @@ app.post("/login", function(req, res) {
             if (results[0].password == passedUserObject.password) {
               //Reload page on client end, with a JWT Token (currently fake String saved as Cookie)
 
-              var token = jwt.sign(passedUserObject, "shhhhh");
+              var token = jwt.sign(passedUserObject, "shhhhh", {
+                expiresIn: "1h"
+              });
               res.json({ jwt: token });
             } else {
               res.json({ error: "failed Login to " + passedUserObject.email });
