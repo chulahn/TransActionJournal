@@ -6,6 +6,8 @@ var MongoClient = mongo.MongoClient;
 var databaseURL = "mongodb://admin:tajadmin1@ds125195.mlab.com:25195/eyecoin";
 var ObjectId = require("mongodb").ObjectId;
 
+var jwt = require("jsonwebtoken");
+
 var bodyParser = require("body-parser");
 app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(
@@ -192,7 +194,9 @@ app.post("/login", function(req, res) {
           if (results.length > 0) {
             if (results[0].password == passedUserObject.password) {
               //Reload page on client end, with a JWT Token (currently fake String saved as Cookie)
-              res.json({ token: "tHiSi$ToKeN" });
+
+              var token = jwt.sign(passedUserObject, "shhhhh");
+              res.json({ jwt: token });
             } else {
               res.json({ error: "failed Login to " + passedUserObject.email });
             }
