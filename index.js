@@ -83,8 +83,6 @@ app.get("/users", function(req, res) {
   });
 });
 
-// app.get("/user/:userId", passport.authenticate("jwt", { session: false}), function(req, res) {
-
 app.get(
   "/user/:userId",
   passport.authenticate("jwt", { session: false }),
