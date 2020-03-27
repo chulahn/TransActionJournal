@@ -6,7 +6,20 @@ var MongoClient = mongo.MongoClient;
 var databaseURL = "mongodb://admin:tajadmin1@ds125195.mlab.com:25195/eyecoin";
 var ObjectId = require("mongodb").ObjectId;
 
+var passport = require("passport");
 var jwt = require("jsonwebtoken");
+var JwtStrategy = require("passport-jwt").Strategy,
+  ExtractJwt = require("passport-jwt").ExtractJwt;
+
+var opts = {};
+opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
+opts.secretOrKey = "secret";
+
+passport.use(
+  new JwtStrategy(opts, function(jwt_payload, done) {
+    done(null, jwt_payload);
+  })
+);
 
 var bodyParser = require("body-parser");
 app.use(bodyParser.json()); // to support JSON-encoded bodies
@@ -70,28 +83,33 @@ app.get("/users", function(req, res) {
   });
 });
 
-app.get("/user/:userId", function(req, res) {
-  MongoClient.connect(databaseURL, function(err, client) {
-    if (client) {
-      console.log("app.get('/ex' : Connected to client");
+// app.get("/user/:userId", passport.authenticate("jwt", { session: false}), function(req, res) {
 
-      var db = client.db("eyecoin");
-      var transactionCollection = db.collection("users"); // Users does not exist yet.
+app.get(
+  "/user/:userId",
+  passport.authenticate("jwt", { session: false }),
+  function(req, res) {
+    MongoClient.connect(databaseURL, function(err, client) {
+      if (client) {
+        console.log("app.get('/ex' : Connected to client");
 
-      transactionCollection
-        .find({ userId: userId })
-        .toArray(function(err, results) {
+        var db = client.db("eyecoin");
+        var userCollection = db.collection("users"); // Users does not exist yet.
+
+        // userCollection.find({{ userId: userId }}).toArray(function(err, results) {
+        userCollection.find({}).toArray(function(err, results) {
           if (results) {
             console.log(results);
             res.send(results);
           }
         });
-    } else {
-      console.log("Error connecting to Database");
-      console.log(err);
-    }
-  });
-});
+      } else {
+        console.log("Error connecting to Database");
+        console.log(err);
+      }
+    });
+  }
+);
 
 // POST REQUEST : create User, create Transaction.  update User, update Transaction , delete
 
@@ -195,7 +213,7 @@ app.post("/login", function(req, res) {
             if (results[0].password == passedUserObject.password) {
               //Reload page on client end, with a JWT Token (currently fake String saved as Cookie)
 
-              var token = jwt.sign(passedUserObject, "shhhhh", {
+              var token = jwt.sign(passedUserObject, "secret", {
                 expiresIn: "1h"
               });
               res.json({ jwt: token });
