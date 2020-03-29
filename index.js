@@ -109,6 +109,63 @@ app.get(
   }
 );
 
+//Look up transactions based Logged in User
+app.post("/trans/user", function(req, res, next) {
+  passport.authenticate("jwt", { session: false }, function(err, user, info) {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      console.log("no user");
+      //show not logged in popup.
+      return res.redirect("/login");
+    }
+    console.log("user", user, " info ", info);
+
+    MongoClient.connect(databaseURL, function(err, client) {
+      if (client) {
+        console.log("app.get('/trans/user' : Connected to client");
+
+        var db = client.db("eyecoin"); //change name
+        var transactionCollection = db.collection("demo"); //hcange name
+
+        transactionCollection
+          .find({ userId: parseInt(user.id) })
+          .toArray(function(err, results) {
+            if (results) {
+              console.log(results);
+              res.send(results);
+            }
+          });
+      }
+    });
+  })(req, res, next);
+});
+
+//lookup transactions by req.params
+app.get("/trans/user/:userId", function(req, res) {
+  MongoClient.connect(databaseURL, function(err, client) {
+    if (client) {
+      console.log("app.get('/users' : Connected to client");
+
+      var db = client.db("eyecoin"); // change to DB name
+      var transCollection = db.collection("demo"); // change to Collection name
+      console.log(req.params.userId);
+      transCollection
+        .find({ userId: parseInt(req.params.userId) })
+        .toArray(function(err, results) {
+          if (results) {
+            console.log(results);
+            res.send(results);
+          }
+        });
+    } else {
+      console.log("Error connecting to Database");
+      console.log(err);
+    }
+  });
+});
+
 // POST REQUEST : create User, create Transaction.  update User, update Transaction , delete
 
 // Insert a Transaction.  User is same
