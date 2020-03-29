@@ -112,7 +112,11 @@ app.get(
 // POST REQUEST : create User, create Transaction.  update User, update Transaction , delete
 
 // Insert a Transaction.  User is same
-app.post("/trans", function(req, res) {
+app.post("/trans", passport.authenticate("jwt", { session: false }), function(
+  req,
+  res
+) {
+  // app.post("/trans", function(req, res) {
   MongoClient.connect(databaseURL, function(err, client) {
     if (client) {
       console.log("app.post('/trans' : Connected to client");

@@ -242,8 +242,13 @@ app.controller("dataController", [
       itemToAdd.created = new Date();
       console.log("addItem: itemToAdd ", itemToAdd);
 
+      var token = localStorage.getItem("jwt");
+
       $.ajax({
         url: "/trans",
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader("Authorization", "Bearer " + token);
+        },
         data: JSON.stringify(itemToAdd),
         type: "POST",
         contentType: "application/json"
@@ -522,6 +527,10 @@ app.controller("dataController", [
         contentType: "application/json"
       }).done(function(data) {
         console.log(data);
+        
+        localStorage.setItem("jwt", data.jwt);
+
+        console.log("localStorage jwt set : ", localStorage.getItem("jwt"))
         $scope.$apply(function() {
           console.log("apply");
         });
