@@ -24,6 +24,10 @@ Todo:
   
     ☐ Use ENV.Var @created(09-17-19 14:22)
 
+3/20 3:32
+Save jwt to localStorage.
+Make addTransaction protected route
+
 3/27 1:27
 Send back a jwt.
 Added protected route based on JWT.
