@@ -1,12 +1,13 @@
 Next:
-On success of that login function, get JWT, and store cookie with userId.
+On success of that login function, get JWT, 
+ ->store cookie with userId.
 
 Create Transaction with current userId based on loggedIn Cookie / (JWT).
 
 Update ALL methods to use backend instead of mlab
 Host on Heroku.
 
-Protected Routes
+Update all Protected Routes
 
 Todo:
     ☐ Host it on Heroku @created(Mon 02/17/2020 - 02:57 AM)
@@ -22,6 +23,10 @@ Todo:
     ☐ Check if first time by Cookie.  Then show modal video.  @created(09-17-19 13:47)
   
     ☐ Use ENV.Var @created(09-17-19 14:22)
+
+3/27 1:27
+Send back a jwt.
+Added protected route based on JWT.
 
 3/25 19:21
 Log In, and reject on wrong password.
