@@ -112,37 +112,49 @@ app.get(
 // POST REQUEST : create User, create Transaction.  update User, update Transaction , delete
 
 // Insert a Transaction.  User is same
-app.post("/trans", passport.authenticate("jwt", { session: false }), function(
-  req,
-  res
-) {
-  // app.post("/trans", function(req, res) {
-  MongoClient.connect(databaseURL, function(err, client) {
-    if (client) {
-      console.log("app.post('/trans' : Connected to client");
-
-      var db = client.db("eyecoin"); //change name
-      var transactionCollection = db.collection("demo"); //hcange name
-
-      var passedTransObject = req.body;
-
-      //get length of transaction collection
-      passedTransObject.id = transactionCollection.count();
-
-      console.log(passedTransObject);
-      transactionCollection.insert(req.body, function(err, results) {
-        if (!err) {
-          console.log("Successful insert", results);
-          res.send(req.body);
-        } else {
-          console.log("Insert transaction error", err);
-          res.status(400).send(err);
-        }
-      });
-    } else {
-      console.log("Error connecting to Database", err);
+app.post("/trans", function(req, res, next) {
+  passport.authenticate("jwt", { session: false }, function(err, user, info) {
+    if (err) {
+      return next(err);
     }
-  });
+    if (!user) {
+      console.log("no user");
+      return res.redirect("/login");
+    }
+    console.log("user", user, " info ", info);
+
+    // app.post("/trans", function(req, res) {
+    MongoClient.connect(databaseURL, function(err, client) {
+      if (client) {
+        console.log("app.post('/trans' : Connected to client");
+
+        var db = client.db("eyecoin"); //change name
+        var transactionCollection = db.collection("demo"); //hcange name
+
+        var passedTransObject = req.body;
+        passedTransObject.userId = user.id;
+
+        transactionCollection.find({}).toArray(function(err, results) {
+          if (results) {
+            passedTransObject.id = results.length;
+            console.log(passedTransObject);
+
+            transactionCollection.insert(req.body, function(err, results) {
+              if (!err) {
+                console.log("Successful insert", results);
+                res.send(req.body);
+              } else {
+                console.log("Insert transaction error", err);
+                res.status(400).send(err);
+              }
+            });
+          }
+        });
+      } else {
+        console.log("Error connecting to Database", err);
+      }
+    });
+  })(req, res, next);
 });
 
 //Create User.  {}.email , password, id
@@ -213,9 +225,8 @@ app.post("/login", function(req, res) {
         .toArray(function(err, results) {
           if (results.length > 0) {
             if (results[0].password == passedUserObject.password) {
-              //Reload page on client end, with a JWT Token (currently fake String saved as Cookie)
-
-              var token = jwt.sign(passedUserObject, "secret", {
+              //TODO: do an update with loggedIn, then sign and send token
+              var token = jwt.sign(results[0], "secret", {
                 expiresIn: "1h"
               });
               res.json({ jwt: token });
