@@ -30,6 +30,11 @@ app.controller("dataController", [
     }
 
     $scope.loginMode = true;
+    $scope.loggedIn = false;
+
+    if (localStorage.getItem("jwt")) {
+      $scope.loggedIn = true;
+    }
 
     // Called after addItem, deletingItem, updateItem, or updatingItemTags.
     // Get transactions from database, and set as $scope data.
@@ -530,6 +535,7 @@ app.controller("dataController", [
         console.log(data);
 
         localStorage.setItem("jwt", data.jwt);
+        $scope.loggedIn = true;
 
         console.log("localStorage jwt set : ", localStorage.getItem("jwt"));
         $scope.$apply(function() {
@@ -540,6 +546,7 @@ app.controller("dataController", [
 
     $scope.logout = function() {
       localStorage.removeItem("jwt");
+      $scope.loggedIn = false;
       //hit backend later?  for now
       $window.location.reload();
     };

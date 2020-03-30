@@ -59,10 +59,10 @@
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
-          <li><a data-toggle="modal" data-target="#loginRegModal">Login / Register</a>
+          <li><a ng-if="!loggedIn" data-toggle="modal" data-target="#loginRegModal">Login / Register</a>
           </li>
           <li>
-            <span ng-click="logout()">Logout</span>
+            <a ng-if="loggedIn" ng-click="logout()">Logout</a>
           </li>
         </ul>
       </div><!-- /.navbar-collapse -->
