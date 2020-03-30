@@ -19,6 +19,10 @@ Todo:
   
     ☐ Use ENV.Var @created(09-17-19 14:22)
 
+3/30 18:08
+only show logged in Users transactions
+added logout button, and only show when loggedIn.
+
 3/29 5:24
 show transactions based on ID, or logged in user
 
