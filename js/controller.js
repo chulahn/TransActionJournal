@@ -539,11 +539,8 @@ app.controller("dataController", [
     };
 
     $scope.logout = function() {
-      console.log("logout");
       localStorage.removeItem("jwt");
       //hit backend later?  for now
-      //reload page in angular.
-      console.log($window);
       $window.location.reload();
     };
     //End CRUD Methods.
