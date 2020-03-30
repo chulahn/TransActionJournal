@@ -110,7 +110,7 @@ app.get(
 );
 
 //Look up transactions based Logged in User
-app.post("/trans/user", function(req, res, next) {
+app.get("/trans/user", function(req, res, next) {
   passport.authenticate("jwt", { session: false }, function(err, user, info) {
     if (err) {
       return next(err);

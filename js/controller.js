@@ -40,13 +40,18 @@ app.controller("dataController", [
     // Get transactions from database, and set as $scope data.
     $scope.getDBTransactions = function() {
       console.log("getDBTransactions: calling AJAX");
+      var token = localStorage.getItem("jwt");
+
       $.ajax({
-        url:
-          "https://api.mlab.com/api/1/databases/eyecoin/collections/demo?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws",
+        url: "/trans/user",
+        beforeSend: function(xhr) {
+          xhr.setRequestHeader("Authorization", "Bearer " + token);
+        },
         type: "GET",
         contentType: "application/json"
       }).done(function(data) {
         $scope.$apply(function() {
+          console.log(data);
           $scope.transactions = data;
           $scope.convertData();
 
@@ -383,7 +388,7 @@ app.controller("dataController", [
           // console.log("transaction._id === undefined ", transaction);
           return;
         }
-        var transID = transaction._id.$oid;
+        var transID = transaction._id.$oid || transaction._id; //transaction._id sometimes
 
         // console.log("populateTags: transID: ", transID);
         // console.log("populateTags: $(transID): ", $(transID));
@@ -392,6 +397,7 @@ app.controller("dataController", [
         $("#" + transID).empty();
         // Create Taggle. First Param is id.
         //console.log("populateTags: transaction.tags", transaction.tags);
+        // console.log(transID);
         new Taggle(transID, {
           tags: transaction.tags,
 
