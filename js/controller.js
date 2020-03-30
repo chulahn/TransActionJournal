@@ -1,7 +1,7 @@
 app.controller("dataController", [
   "$scope",
+  "$window",
   "calcHelper",
-  function($scope, calcHelper) {
     //Initialize with Some Dummy Data.
     // [] => .name , .price, .date, .sold, .tags
     $scope.transactions = [
@@ -527,14 +527,23 @@ app.controller("dataController", [
         contentType: "application/json"
       }).done(function(data) {
         console.log(data);
-        
+
         localStorage.setItem("jwt", data.jwt);
 
-        console.log("localStorage jwt set : ", localStorage.getItem("jwt"))
+        console.log("localStorage jwt set : ", localStorage.getItem("jwt"));
         $scope.$apply(function() {
           console.log("apply");
         });
       });
+    };
+
+    $scope.logout = function() {
+      console.log("logout");
+      localStorage.removeItem("jwt");
+      //hit backend later?  for now
+      //reload page in angular.
+      console.log($window);
+      $window.location.reload();
     };
     //End CRUD Methods.
 
