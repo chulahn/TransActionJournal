@@ -2,6 +2,7 @@ app.controller("dataController", [
   "$scope",
   "$window",
   "calcHelper",
+  function($scope, $window, calcHelper) {
     //Initialize with Some Dummy Data.
     // [] => .name , .price, .date, .sold, .tags
     $scope.transactions = [
