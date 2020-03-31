@@ -468,15 +468,11 @@ app.controller("dataController", [
         $scope.transactions.splice(indexToRemove, 1);
 
         // Remove from DB
-        var transID = transaction._id.$oid;
-        var reqURL =
-          "https://api.mlab.com/api/1/databases/eyecoin/collections/demo/" +
-          transID +
-          "?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws";
-
+        var transID = transaction._id.$oid || transaction._id; //check later how _id is mapped
+        var reqURL = "/delete/trans/" + transID;
         $.ajax({
           url: reqURL,
-          type: "DELETE",
+          type: "POST",
           async: true,
           timeout: 0
         })
