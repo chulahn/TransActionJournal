@@ -363,8 +363,8 @@ app.post("/delete/trans/:transId", function(req, res) {
     if (client) {
       console.log("app.post('/delete/:transId' : Connected to client");
 
-      var db = client.db("exercise-journal"); //change names
-      var workoutCollection = db.collection("workouts"); //change name
+      var db = client.db("eyecoin"); //change names
+      var workoutCollection = db.collection("demo"); //change name
 
       var o_id = new ObjectId(req.params.transId);
 
@@ -375,7 +375,7 @@ app.post("/delete/trans/:transId", function(req, res) {
           res.status(400).send(err);
         } else {
           console.log("Successful edit search");
-          console.log(results);
+          // console.log(results);
           res.send(results);
         }
       });
