@@ -11,6 +11,8 @@ var jwt = require("jsonwebtoken");
 var JwtStrategy = require("passport-jwt").Strategy,
   ExtractJwt = require("passport-jwt").ExtractJwt;
 
+var bcrypt = require("bcrypt");
+
 var opts = {};
 opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = "secret";
@@ -227,6 +229,7 @@ app.post("/register", function(req, res) {
       passedUserObject.createdDate = new Date();
 
       console.log(passedUserObject);
+      // console.log(passedUserObject.password, typeof passedUserObject.password);
 
       if (passedUserObject && passedUserObject.email) {
         //Check to see if the email exists
@@ -238,14 +241,29 @@ app.post("/register", function(req, res) {
               userCollection.find({}).toArray(function(err, results) {
                 if (results) {
                   passedUserObject.id = results.length;
-                  userCollection.insert(req.body, function(err, results) {
-                    if (!err) {
-                      console.log("Successful insert", results);
-                      res.send(req.body);
-                    } else {
-                      console.log("Insert transaction error", err);
-                      res.status(400).send(err);
-                    }
+
+                  bcrypt.genSalt(10, (err, salt) => {
+                    bcrypt.hash(
+                      passedUserObject.password,
+                      salt,
+                      (err, hash) => {
+                        if (err) throw err;
+                        passedUserObject.password = hash;
+                        console.log("hash is ", hash);
+                        userCollection.insert(passedUserObject, function(
+                          err,
+                          results
+                        ) {
+                          if (!err) {
+                            console.log("Successful insert", results);
+                            res.send(passedUserObject);
+                          } else {
+                            console.log("Insert transaction error", err);
+                            res.status(400).send(err);
+                          }
+                        });
+                      }
+                    );
                   });
                 }
               });
@@ -281,15 +299,22 @@ app.post("/login", function(req, res) {
         .find({ email: passedUserObject.email.toLowerCase() })
         .toArray(function(err, results) {
           if (results.length > 0) {
-            if (results[0].password == passedUserObject.password) {
-              //TODO: do an update with loggedIn, then sign and send token
-              var token = jwt.sign(results[0], "secret", {
-                expiresIn: "1h"
+            bcrypt
+              .compare(passedUserObject.password, results[0].password)
+              .then(isMatch => {
+                // console.log(passedUserObject.password, results[0].password);
+                // console.log("isMatch: ", isMatch);
+                if (isMatch) {
+                  var token = jwt.sign(results[0], "secret", {
+                    expiresIn: "1h"
+                  });
+                  res.json({ jwt: token });
+                } else {
+                  res.json({
+                    error: "failed Login to " + passedUserObject.email
+                  });
+                }
               });
-              res.json({ jwt: token });
-            } else {
-              res.json({ error: "failed Login to " + passedUserObject.email });
-            }
           } else {
             res.json({ error: "no such user " + passedUserObject.email });
           }
