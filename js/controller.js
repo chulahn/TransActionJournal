@@ -5,27 +5,23 @@ app.controller("dataController", [
   function ($scope, $window, calcHelper) {
     //Initialize with Some Dummy Data.
     // [] => .name , .price, .date, .sold, .tags
-    $scope.transactions = [
-      // {
-      //   name: "Supreme Example",
-      //   price: 120,
-      //   date: new Date("10/17/17 19:27"),
-      //   tags: ["hype", "flip"]
-      // },
-      // {
-      //   name: "Kith Example",
-      //   price: 100,
-      //   date: new Date("10/17/17 19:28:01"),
-      //   tags: ["hype", "flip"]
-      // }
-    ];
+    // {
+    //   name: "Supreme Example",
+    //   price: 120,
+    //   date: new Date("10/17/17 19:27"),
+    //   tags: ["hype", "flip"]
+    // },
+    $scope.transactions = [];
     $scope.cH = calcHelper;
 
     //Get previous transactions if available.
     var transactionLog = JSON.parse(localStorage.getItem("transactionLog"));
 
     if (transactionLog && transactionLog.length > 0) {
-      console.log("Using localStorage transactionLog ", transactionLog);
+      console.log(
+        "Found data, Using localStorage transactionLog ",
+        transactionLog
+      );
       $scope.transactions = transactionLog;
     }
 
@@ -54,6 +50,9 @@ app.controller("dataController", [
           console.log(data);
           $scope.transactions = data;
           $scope.convertData();
+          if (data) {
+            $scope.loggedIn = true;
+          }
 
           // Format for Calendar
           // {
@@ -78,12 +77,8 @@ app.controller("dataController", [
             return mapped;
           });
         });
-        console.log(
-          "getDBTransactions: finished AJAX call. $scope.transactions",
-          $scope.transactions,
-          "$scope.days",
-          $scope.days
-        );
+        // prettier-ignore
+        console.log("getDBTransactions: finished AJAX call. $scope.transactions", $scope.transactions, "$scope.days", $scope.days);
       });
     };
 
@@ -111,9 +106,9 @@ app.controller("dataController", [
         var currentTransDate = new Date(currentTransaction.date);
 
         // MonthYear
+        // prettier-ignore
         var currentTransMonthYear =
-          currentTransDate.getMonth() +
-          1 +
+          currentTransDate.getMonth() + 1 +
           "/" +
           (currentTransDate.getYear() + 1900);
 
@@ -290,6 +285,7 @@ app.controller("dataController", [
       var transID = $scope.transactionId;
 
       //PUT /databases/{database}/collections/{collection}/{_id}
+      //TODO: make a update method for backend.  PUT command on mongo
       var reqURL =
         "https://api.mlab.com/api/1/databases/eyecoin/collections/demo/" +
         transID +
@@ -430,6 +426,7 @@ app.controller("dataController", [
     };
 
     // Called when tag is added or removed
+    // TODO: Update to use Node Backend
     $scope.updateItemTags = function (transaction, newTags) {
       console.log("updateItemTags: ", transaction, newTags);
       var transID = transaction._id.$oid;
