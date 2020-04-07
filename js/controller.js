@@ -2,7 +2,7 @@ app.controller("dataController", [
   "$scope",
   "$window",
   "calcHelper",
-  function($scope, $window, calcHelper) {
+  function ($scope, $window, calcHelper) {
     //Initialize with Some Dummy Data.
     // [] => .name , .price, .date, .sold, .tags
     $scope.transactions = [
@@ -10,14 +10,14 @@ app.controller("dataController", [
         name: "Supreme Example",
         price: 120,
         date: new Date("10/17/17 19:27"),
-        tags: ["hype", "flip"]
+        tags: ["hype", "flip"],
       },
       {
         name: "Kith Example",
         price: 100,
         date: new Date("10/17/17 19:28:01"),
-        tags: ["hype", "flip"]
-      }
+        tags: ["hype", "flip"],
+      },
     ];
     $scope.cH = calcHelper;
 
@@ -38,19 +38,19 @@ app.controller("dataController", [
 
     // Called after addItem, deletingItem, updateItem, or updatingItemTags.
     // Get transactions from database, and set as $scope data.
-    $scope.getDBTransactions = function() {
+    $scope.getDBTransactions = function () {
       console.log("getDBTransactions: calling AJAX");
       var token = localStorage.getItem("jwt");
 
       $.ajax({
         url: "/trans/user",
-        beforeSend: function(xhr) {
+        beforeSend: function (xhr) {
           xhr.setRequestHeader("Authorization", "Bearer " + token);
         },
         type: "GET",
-        contentType: "application/json"
-      }).done(function(data) {
-        $scope.$apply(function() {
+        contentType: "application/json",
+      }).done(function (data) {
+        $scope.$apply(function () {
           console.log(data);
           $scope.transactions = data;
           $scope.convertData();
@@ -66,7 +66,7 @@ app.controller("dataController", [
           //   incrementsBadgeTotal: true,
           //   price: 3.89
           // },
-          $scope.mappedCalendar = $scope.transactions.map(function(trans) {
+          $scope.mappedCalendar = $scope.transactions.map(function (trans) {
             var mapped = {};
             mapped.title = trans.name;
             mapped.startsAt = new Date(trans.date);
@@ -102,7 +102,7 @@ app.controller("dataController", [
 
       Called after $scope.getDBTransactions, so that data is formatted and able to displayed on template.
     */
-    $scope.convertData = function(data) {
+    $scope.convertData = function (data) {
       var monthYearObject = {};
       var weeksObject = {};
 
@@ -151,7 +151,7 @@ app.controller("dataController", [
       }
 
       $scope.transactionsByMonthYear = Object.keys(monthYearObject).map(
-        function(key) {
+        function (key) {
           // Take Date Key 5/2/2018
           // Create Array of Objects with date and exercises
           return monthYearObject[key];
@@ -161,12 +161,12 @@ app.controller("dataController", [
       // For each day, add a .tags property that is an object with keys: tag, object: array of transactions
       // e.g. { tag_name: [transactions] }
       $scope.transactionsByMonthYear = $scope.transactionsByMonthYear.map(
-        function(day) {
+        function (day) {
           var tagObject = {};
 
-          day.transactions.forEach(function(trans) {
+          day.transactions.forEach(function (trans) {
             if (trans.tags) {
-              trans.tags.forEach(function(tag) {
+              trans.tags.forEach(function (tag) {
                 tag = tag.trimStart().trimEnd();
 
                 var tagNotCreated = !tagObject[tag];
@@ -186,7 +186,7 @@ app.controller("dataController", [
         }
       );
 
-      $scope.transactionsByWeek = Object.keys(weeksObject).map(function(key) {
+      $scope.transactionsByWeek = Object.keys(weeksObject).map(function (key) {
         // Take Date Key 5/2/2018
         // Create Array of Objects with date and exercises
         return weeksObject[key];
@@ -234,7 +234,7 @@ app.controller("dataController", [
 
         if (typeof $scope.tags === "string") {
           transaction.tags = $scope.tags.split(",");
-          transaction.tags.forEach(function(t) {
+          transaction.tags.forEach(function (t) {
             t = t.trimStart().trimEnd();
           });
         }
@@ -247,7 +247,7 @@ app.controller("dataController", [
     }
 
     // Called when Adding an item.  Adds to Database.
-    $scope.addItem = function() {
+    $scope.addItem = function () {
       var itemToAdd = {};
       itemToAdd = composeTransaction();
       itemToAdd.created = new Date();
@@ -257,16 +257,16 @@ app.controller("dataController", [
 
       $.ajax({
         url: "/trans",
-        beforeSend: function(xhr) {
+        beforeSend: function (xhr) {
           xhr.setRequestHeader("Authorization", "Bearer " + token);
         },
         data: JSON.stringify(itemToAdd),
         type: "POST",
-        contentType: "application/json"
-      }).done(function() {
+        contentType: "application/json",
+      }).done(function () {
         // after successfully adding item, update localStorage
         // ajax called must be called so id can be saved in localStorage
-        $scope.$apply(function() {
+        $scope.$apply(function () {
           $scope.getDBTransactions();
         });
         localStorage.setItem(
@@ -281,7 +281,7 @@ app.controller("dataController", [
     };
 
     // Called after fields have been filled in.
-    $scope.updateItem = function() {
+    $scope.updateItem = function () {
       console.log("updateItem: $scope.transactionId", $scope.transactionId);
 
       var transactionToUpdate = composeTransaction();
@@ -299,9 +299,9 @@ app.controller("dataController", [
         url: reqURL,
         data: JSON.stringify({ $set: transactionToUpdate }),
         type: "PUT",
-        contentType: "application/json"
-      }).done(function() {
-        $scope.$apply(function() {
+        contentType: "application/json",
+      }).done(function () {
+        $scope.$apply(function () {
           $scope.getDBTransactions();
         });
         localStorage.setItem(
@@ -315,7 +315,7 @@ app.controller("dataController", [
     // Called when transaction name is clicked on
     // Highlights row, and populates data for easy update
     // Deselects and clears inputs if clicked again
-    $scope.fillTransactionInfo = function(transaction, $event) {
+    $scope.fillTransactionInfo = function (transaction, $event) {
       // Compare Last Selected w/ Clicked
 
       // Get Last Selected Row TR/TD.edit-selected
@@ -377,7 +377,7 @@ app.controller("dataController", [
 
     // Create Taggle Tags on browser.
     // has onTagAdd, onTagRemove methods
-    $scope.populateTags = function(transaction) {
+    $scope.populateTags = function (transaction) {
       // {}.date , name, price , tags, _id
 
       if (transaction) {
@@ -401,7 +401,7 @@ app.controller("dataController", [
         new Taggle(transID, {
           tags: transaction.tags,
 
-          onTagAdd: function(event, tag) {
+          onTagAdd: function (event, tag) {
             console.log(
               "populateTags: onTagAdd: event, tag, this",
               event,
@@ -418,19 +418,19 @@ app.controller("dataController", [
             $scope.updateItemTags(transaction, transaction.tags);
           },
 
-          onTagRemove: function(event, tag) {
+          onTagRemove: function (event, tag) {
             var indexToRemove = transaction.tags.indexOf(tag);
             console.log("popuplateTag: onTagRemove: tag", tag);
             transaction.tags.splice(indexToRemove, 1);
             console.log("populateTag: onTagRemove: $scope.updateItemTags");
             $scope.updateItemTags(transaction, transaction.tags);
-          }
+          },
         });
       }
     };
 
     // Called when tag is added or removed
-    $scope.updateItemTags = function(transaction, newTags) {
+    $scope.updateItemTags = function (transaction, newTags) {
       console.log("updateItemTags: ", transaction, newTags);
       var transID = transaction._id.$oid;
 
@@ -444,11 +444,11 @@ app.controller("dataController", [
       $.ajax({
         url: reqURL,
         data: JSON.stringify({
-          $set: { tags: newTags, lastUpdated: currentTime }
+          $set: { tags: newTags, lastUpdated: currentTime },
         }),
         type: "PUT",
-        contentType: "application/json"
-      }).done(function() {
+        contentType: "application/json",
+      }).done(function () {
         alert("finished updateItemTags");
         console.log("updateItemTags: finished updateItemTags");
         $scope.getDBTransactions();
@@ -457,7 +457,7 @@ app.controller("dataController", [
 
     // Asks users whether to delete
     // Remove locally, then remove from DB
-    $scope.deleteItem = function(transaction) {
+    $scope.deleteItem = function (transaction) {
       var deleteItem = confirm("Delete Item?");
       if (deleteItem) {
         console.log("deleteItem: deleting item", transaction);
@@ -474,9 +474,9 @@ app.controller("dataController", [
           url: reqURL,
           type: "POST",
           async: true,
-          timeout: 0
+          timeout: 0,
         })
-          .done(function() {
+          .done(function () {
             $scope.getDBTransactions();
             alert("done delete");
             localStorage.setItem(
@@ -488,7 +488,7 @@ app.controller("dataController", [
               $scope.transactions
             );
           })
-          .fail(function(data) {
+          .fail(function (data) {
             console.log("deleteItem: failed. data", data);
           });
 
@@ -508,23 +508,23 @@ app.controller("dataController", [
       return newUser;
     }
 
-    $scope.createUser = function() {
+    $scope.createUser = function () {
       var newUser = composeUser();
       $.ajax({
         url: "/register",
         data: JSON.stringify(newUser),
         type: "POST",
-        contentType: "application/json"
-      }).done(function(data) {
+        contentType: "application/json",
+      }).done(function (data) {
         console.log(data);
-        $scope.$apply(function() {
+        $scope.$apply(function () {
           console.log("apply");
         });
       });
       //make POST REQUEST WITH INFO
     };
 
-    $scope.login = function() {
+    $scope.login = function () {
       var newUser = composeUser();
       delete newUser.usersName; //trim unnecessary info for now.  REMOVE LATER
 
@@ -532,21 +532,21 @@ app.controller("dataController", [
         url: "/login",
         data: JSON.stringify(newUser),
         type: "POST",
-        contentType: "application/json"
-      }).done(function(data) {
+        contentType: "application/json",
+      }).done(function (data) {
         console.log(data);
 
         localStorage.setItem("jwt", data.jwt);
         $scope.loggedIn = true;
 
         console.log("localStorage jwt set : ", localStorage.getItem("jwt"));
-        $scope.$apply(function() {
+        $scope.$apply(function () {
           console.log("apply");
         });
       });
     };
 
-    $scope.logout = function() {
+    $scope.logout = function () {
       localStorage.removeItem("jwt");
       $scope.loggedIn = false;
       //hit backend later?  for now
@@ -554,7 +554,7 @@ app.controller("dataController", [
     };
     //End CRUD Methods.
 
-    $scope.toggleLogin = function() {
+    $scope.toggleLogin = function () {
       $scope.loginMode = !$scope.loginMode;
 
       // register
@@ -568,7 +568,7 @@ app.controller("dataController", [
     };
 
     // Count flip count and investment.  Add transaction when sold has a value.
-    $scope.getOverallFlip = function() {
+    $scope.getOverallFlip = function () {
       var flip = {};
       flip.sum = 0;
       flip.count = 0;
@@ -598,7 +598,7 @@ app.controller("dataController", [
         editable: false,
         deletable: false,
         incrementsBadgeTotal: true,
-        price: 3.89
+        price: 3.89,
       },
       {
         title: "Toll", // The title of the event
@@ -608,7 +608,7 @@ app.controller("dataController", [
         editable: false,
         deletable: false,
         incrementsBadgeTotal: true,
-        price: 2.6
+        price: 2.6,
       },
       {
         title: "Ralph Lauren Polo", // The title of the event
@@ -618,7 +618,7 @@ app.controller("dataController", [
         editable: false,
         deletable: false,
         incrementsBadgeTotal: true,
-        price: 0.91
+        price: 0.91,
       },
       {
         title: "Wells Fargo", // The title of the event
@@ -628,10 +628,10 @@ app.controller("dataController", [
         editable: false,
         deletable: false,
         incrementsBadgeTotal: true,
-        price: 15
-      }
+        price: 15,
+      },
     ];
-    $scope.cellModifier = function(cell) {
+    $scope.cellModifier = function (cell) {
       // console.log(cell);
 
       if (cell.events.length > 0) {
@@ -648,8 +648,8 @@ app.controller("dataController", [
     };
 
     // Tag Method
-    $scope.getKeyByValue = function(object, value) {
-      return Object.keys(object).find(key => object[key] === value);
+    $scope.getKeyByValue = function (object, value) {
+      return Object.keys(object).find((key) => object[key] === value);
     };
-  }
+  },
 ]);
