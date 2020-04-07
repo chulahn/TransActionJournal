@@ -6,18 +6,18 @@ app.controller("dataController", [
     //Initialize with Some Dummy Data.
     // [] => .name , .price, .date, .sold, .tags
     $scope.transactions = [
-      {
-        name: "Supreme Example",
-        price: 120,
-        date: new Date("10/17/17 19:27"),
-        tags: ["hype", "flip"],
-      },
-      {
-        name: "Kith Example",
-        price: 100,
-        date: new Date("10/17/17 19:28:01"),
-        tags: ["hype", "flip"],
-      },
+      // {
+      //   name: "Supreme Example",
+      //   price: 120,
+      //   date: new Date("10/17/17 19:27"),
+      //   tags: ["hype", "flip"]
+      // },
+      // {
+      //   name: "Kith Example",
+      //   price: 100,
+      //   date: new Date("10/17/17 19:28:01"),
+      //   tags: ["hype", "flip"]
+      // }
     ];
     $scope.cH = calcHelper;
 
