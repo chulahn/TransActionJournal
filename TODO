@@ -1,15 +1,9 @@
 Next:
-Update ALL methods to use backend instead of mlab
-
-Update all Protected Routes
 
 Todo:
 
   ☐ Close Modal , after Login@created(Mon 04/20/2020 - 04:03 AM)
     ☐ Show Logged In User in stored LocalStorage Json. @created(Mon 04/20/2020 - 04:04 AM)
-
-  ☐ Create Protected Routes @created(Tue 03/24/2020 - 02:46 PM)
-    Get / Update / Delete
 
   ☐ Make Visually appealing @created(09-17-19 13:46)
 
@@ -18,6 +12,15 @@ Todo:
   
     ☐ Use ENV.Var @created(09-17-19 14:22)
 
+4/20 6:27
+Did Protected Route Update
+  ✔ Create Protected Routes UpdateItemTags @created(Tue 03/24/2020 - 02:46 PM) @done(Mon 04/20/2020 - 06:27 AM)
+Update ALL methods to use backend instead of mlab
+
+
+4/1 ?
+Protected delete
+
 3/31
 Host on Heroku.
   ✔ Host it on Heroku @created(Mon 02/17/2020 - 02:57 AM) @done(Mon 04/20/2020 - 04:03 AM)
@@ -25,6 +28,7 @@ Host on Heroku.
 3/30 18:08
 only show logged in Users transactions
 added logout button, and only show when loggedIn.
+Protected Get
 
 3/29 5:24
 show transactions based on ID, or logged in user
