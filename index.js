@@ -18,7 +18,7 @@ opts.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 opts.secretOrKey = "secret";
 
 passport.use(
-  new JwtStrategy(opts, function(jwt_payload, done) {
+  new JwtStrategy(opts, function (jwt_payload, done) {
     done(null, jwt_payload);
   })
 );
@@ -28,35 +28,32 @@ app.use(bodyParser.json()); // to support JSON-encoded bodies
 app.use(
   bodyParser.urlencoded({
     // to support URL-encoded bodies
-    extended: true
+    extended: true,
   })
 );
-
-app.use(express.json()); // to support JSON-encoded bodies
-app.use(express.urlencoded()); // to support URL-encoded bodies
 
 var cors = require("cors");
 
 app.use(cors({ credentials: true, origin: true }));
 app.options("*", cors());
 
-app.get("/", function(req, res) {
+app.get("/", function (req, res) {
   res.sendfile("index.html");
 });
 
-app.get("/css/index.css", function(req, res) {
+app.get("/css/index.css", function (req, res) {
   res.sendfile("css/index.css");
 });
 
-app.get("/js/angular-bootstrap-calendar.js", function(req, res) {
+app.get("/js/angular-bootstrap-calendar.js", function (req, res) {
   res.sendfile("js/angular-bootstrap-calendar.js");
 });
 
-app.get("/js/factory.js", function(req, res) {
+app.get("/js/factory.js", function (req, res) {
   res.sendfile("js/factory.js");
 });
 
-app.get("/js/controller.js", function(req, res) {
+app.get("/js/controller.js", function (req, res) {
   res.sendfile("js/controller.js");
 });
 
@@ -64,15 +61,15 @@ app.get("/js/controller.js", function(req, res) {
 
 // Gets all users, and return it.
 // Render page with ejs?
-app.get("/users", function(req, res) {
-  MongoClient.connect(databaseURL, function(err, client) {
+app.get("/users", function (req, res) {
+  MongoClient.connect(databaseURL, function (err, client) {
     if (client) {
       console.log("app.get('/users' : Connected to client");
 
       var db = client.db("eyecoin"); // change to DB name
       var userCollection = db.collection("users"); // change to Collection name
 
-      userCollection.find({}).toArray(function(err, results) {
+      userCollection.find({}).toArray(function (err, results) {
         if (results) {
           console.log(results);
           res.send(results);
@@ -88,8 +85,8 @@ app.get("/users", function(req, res) {
 app.get(
   "/user/:userId",
   passport.authenticate("jwt", { session: false }),
-  function(req, res) {
-    MongoClient.connect(databaseURL, function(err, client) {
+  function (req, res) {
+    MongoClient.connect(databaseURL, function (err, client) {
       if (client) {
         console.log("app.get('/ex' : Connected to client");
 
@@ -97,7 +94,7 @@ app.get(
         var userCollection = db.collection("users"); // Users does not exist yet.
 
         // userCollection.find({{ userId: userId }}).toArray(function(err, results) {
-        userCollection.find({}).toArray(function(err, results) {
+        userCollection.find({}).toArray(function (err, results) {
           if (results) {
             console.log(results);
             res.send(results);
@@ -112,8 +109,8 @@ app.get(
 );
 
 //Look up transactions based Logged in User
-app.get("/trans/user", function(req, res, next) {
-  passport.authenticate("jwt", { session: false }, function(err, user, info) {
+app.get("/trans/user", function (req, res, next) {
+  passport.authenticate("jwt", { session: false }, function (err, user, info) {
     if (err) {
       return next(err);
     }
@@ -124,7 +121,7 @@ app.get("/trans/user", function(req, res, next) {
     }
     console.log("user", user, " info ", info);
 
-    MongoClient.connect(databaseURL, function(err, client) {
+    MongoClient.connect(databaseURL, function (err, client) {
       if (client) {
         console.log("app.get('/trans/user' : Connected to client");
 
@@ -133,7 +130,7 @@ app.get("/trans/user", function(req, res, next) {
 
         transactionCollection
           .find({ userId: parseInt(user.id) })
-          .toArray(function(err, results) {
+          .toArray(function (err, results) {
             if (results) {
               console.log(results);
               res.send(results);
@@ -145,8 +142,8 @@ app.get("/trans/user", function(req, res, next) {
 });
 
 //lookup transactions by req.params
-app.get("/trans/user/:userId", function(req, res) {
-  MongoClient.connect(databaseURL, function(err, client) {
+app.get("/trans/user/:userId", function (req, res) {
+  MongoClient.connect(databaseURL, function (err, client) {
     if (client) {
       console.log("app.get('/users' : Connected to client");
 
@@ -155,7 +152,7 @@ app.get("/trans/user/:userId", function(req, res) {
       console.log(req.params.userId);
       transCollection
         .find({ userId: parseInt(req.params.userId) })
-        .toArray(function(err, results) {
+        .toArray(function (err, results) {
           if (results) {
             console.log(results);
             res.send(results);
@@ -171,8 +168,8 @@ app.get("/trans/user/:userId", function(req, res) {
 // POST REQUEST : create User, create Transaction.  update User, update Transaction , delete
 
 // Insert a Transaction.  User is same
-app.post("/trans", function(req, res, next) {
-  passport.authenticate("jwt", { session: false }, function(err, user, info) {
+app.post("/trans", function (req, res, next) {
+  passport.authenticate("jwt", { session: false }, function (err, user, info) {
     if (err) {
       return next(err);
     }
@@ -183,7 +180,7 @@ app.post("/trans", function(req, res, next) {
     console.log("user", user, " info ", info);
 
     // app.post("/trans", function(req, res) {
-    MongoClient.connect(databaseURL, function(err, client) {
+    MongoClient.connect(databaseURL, function (err, client) {
       if (client) {
         console.log("app.post('/trans' : Connected to client");
 
@@ -193,12 +190,12 @@ app.post("/trans", function(req, res, next) {
         var passedTransObject = req.body;
         passedTransObject.userId = user.id;
 
-        transactionCollection.find({}).toArray(function(err, results) {
+        transactionCollection.find({}).toArray(function (err, results) {
           if (results) {
             passedTransObject.id = results.length;
             console.log(passedTransObject);
 
-            transactionCollection.insert(req.body, function(err, results) {
+            transactionCollection.insert(req.body, function (err, results) {
               if (!err) {
                 console.log("Successful insert", results);
                 res.send(req.body);
@@ -217,8 +214,8 @@ app.post("/trans", function(req, res, next) {
 });
 
 //Create User.  {}.email , password, id
-app.post("/register", function(req, res) {
-  MongoClient.connect(databaseURL, function(err, client) {
+app.post("/register", function (req, res) {
+  MongoClient.connect(databaseURL, function (err, client) {
     if (client) {
       console.log("app.post('/register' : Connected to client");
 
@@ -235,10 +232,10 @@ app.post("/register", function(req, res) {
         //Check to see if the email exists
         userCollection
           .find({ email: passedUserObject.email.toLowerCase() })
-          .toArray(function(err, results) {
+          .toArray(function (err, results) {
             if (results.length == 0) {
               //If not Insert
-              userCollection.find({}).toArray(function(err, results) {
+              userCollection.find({}).toArray(function (err, results) {
                 if (results) {
                   passedUserObject.id = results.length;
 
@@ -250,7 +247,7 @@ app.post("/register", function(req, res) {
                         if (err) throw err;
                         passedUserObject.password = hash;
                         console.log("hash is ", hash);
-                        userCollection.insert(passedUserObject, function(
+                        userCollection.insert(passedUserObject, function (
                           err,
                           results
                         ) {
@@ -279,9 +276,9 @@ app.post("/register", function(req, res) {
 });
 
 //Login User
-app.post("/login", function(req, res) {
+app.post("/login", function (req, res) {
   //look up username in db,
-  MongoClient.connect(databaseURL, function(err, client) {
+  MongoClient.connect(databaseURL, function (err, client) {
     if (client) {
       console.log("app.post('/register' : Connected to client");
 
@@ -297,21 +294,21 @@ app.post("/login", function(req, res) {
 
       userCollection
         .find({ email: passedUserObject.email.toLowerCase() })
-        .toArray(function(err, results) {
+        .toArray(function (err, results) {
           if (results.length > 0) {
             bcrypt
               .compare(passedUserObject.password, results[0].password)
-              .then(isMatch => {
+              .then((isMatch) => {
                 // console.log(passedUserObject.password, results[0].password);
                 // console.log("isMatch: ", isMatch);
                 if (isMatch) {
                   var token = jwt.sign(results[0], "secret", {
-                    expiresIn: "1h"
+                    expiresIn: "1h",
                   });
                   res.json({ jwt: token });
                 } else {
                   res.json({
-                    error: "failed Login to " + passedUserObject.email
+                    error: "failed Login to " + passedUserObject.email,
                   });
                 }
               });
@@ -324,8 +321,8 @@ app.post("/login", function(req, res) {
 });
 
 // Update a transaction.  Called when Updating, or resyncing.  User is same.
-app.post("/trans/:transId", function(req, res) {
-  MongoClient.connect(databaseURL, function(err, client) {
+app.post("/trans/:transId", function (req, res) {
+  MongoClient.connect(databaseURL, function (err, client) {
     if (client) {
       console.log("app.post('/update/:transId' : Connected to client");
 
@@ -336,7 +333,7 @@ app.post("/trans/:transId", function(req, res) {
       delete copy._id;
       var o_id = new ObjectId(req.params.transId);
 
-      transactionCollection.update({ _id: o_id }, { $set: copy }, function(
+      transactionCollection.update({ _id: o_id }, { $set: copy }, function (
         err,
         results
       ) {
@@ -358,8 +355,8 @@ app.post("/trans/:transId", function(req, res) {
 });
 
 // Deletes an transaction.  User is same
-app.post("/delete/trans/:transId", function(req, res) {
-  MongoClient.connect(databaseURL, function(err, client) {
+app.post("/delete/trans/:transId", function (req, res) {
+  MongoClient.connect(databaseURL, function (err, client) {
     if (client) {
       console.log("app.post('/delete/:transId' : Connected to client");
 
@@ -368,7 +365,7 @@ app.post("/delete/trans/:transId", function(req, res) {
 
       var o_id = new ObjectId(req.params.transId);
 
-      workoutCollection.deleteOne({ _id: o_id }, function(err, results) {
+      workoutCollection.deleteOne({ _id: o_id }, function (err, results) {
         if (err) {
           console.log("Edit Search workout error");
           console.log(err);
