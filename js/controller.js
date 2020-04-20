@@ -427,21 +427,16 @@ app.controller("dataController", [
     // TODO: Update to use Node Backend
     $scope.updateItemTags = function (transaction, newTags) {
       console.log("updateItemTags: ", transaction, newTags);
-      var transID = transaction._id.$oid;
+      var transID = transaction._id;
 
-      var reqURL =
-        "https://api.mlab.com/api/1/databases/eyecoin/collections/demo/" +
-        transID +
-        "?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws";
+      var reqURL = "/trans/" + transID;
 
       var currentTime = new Date();
 
       $.ajax({
         url: reqURL,
-        data: JSON.stringify({
-          $set: { tags: newTags, lastUpdated: currentTime },
-        }),
-        type: "PUT",
+        data: JSON.stringify({ tags: newTags, lastUpdated: currentTime }),
+        type: "POST",
         contentType: "application/json",
       }).done(function () {
         alert("finished updateItemTags");
