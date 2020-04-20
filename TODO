@@ -1,16 +1,15 @@
 Next:
 Update ALL methods to use backend instead of mlab
-Host on Heroku.
 
 Update all Protected Routes
 
 Todo:
-    ☐ Host it on Heroku @created(Mon 02/17/2020 - 02:57 AM)
+
+  ☐ Close Modal , after Login@created(Mon 04/20/2020 - 04:03 AM)
+    ☐ Show Logged In User in stored LocalStorage Json. @created(Mon 04/20/2020 - 04:04 AM)
 
   ☐ Create Protected Routes @created(Tue 03/24/2020 - 02:46 PM)
     Get / Update / Delete
-
-  ☐ Assign userId when creating an Transaction @created(09-17-19 13:47)
 
   ☐ Make Visually appealing @created(09-17-19 13:46)
 
@@ -18,6 +17,10 @@ Todo:
     ☐ Check if first time by Cookie.  Then show modal video.  @created(09-17-19 13:47)
   
     ☐ Use ENV.Var @created(09-17-19 14:22)
+
+3/31
+Host on Heroku.
+  ✔ Host it on Heroku @created(Mon 02/17/2020 - 02:57 AM) @done(Mon 04/20/2020 - 04:03 AM)
 
 3/30 18:08
 only show logged in Users transactions
@@ -28,6 +31,7 @@ show transactions based on ID, or logged in user
 
 3/29 4:43
 Store transId properly, and userId to transaction
+  ✔ Assign userId when creating an Transaction @created(09-17-19 13:47) @done(Mon 04/20/2020 - 04:03 AM)
 
 3/29 3:32
 Save jwt to localStorage.
