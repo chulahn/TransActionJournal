@@ -286,15 +286,12 @@ app.controller("dataController", [
 
       //PUT /databases/{database}/collections/{collection}/{_id}
       //TODO: make a update method for backend.  PUT command on mongo
-      var reqURL =
-        "https://api.mlab.com/api/1/databases/eyecoin/collections/demo/" +
-        transID +
-        "?apiKey=Un-mm4UdPQsFEX65W4eplZvLGtEBjJws";
+      var reqURL = "/trans/" + transID;
 
       $.ajax({
         url: reqURL,
-        data: JSON.stringify({ $set: transactionToUpdate }),
-        type: "PUT",
+        data: JSON.stringify(transactionToUpdate),
+        type: "POST",
         contentType: "application/json",
       }).done(function () {
         $scope.$apply(function () {
@@ -350,9 +347,10 @@ app.controller("dataController", [
         $scope.sold = transaction.sold;
 
         $scope.tags = transaction.tags;
+        console.log("transaction, ", transaction);
 
         //fill hidden input
-        $scope.transactionId = transaction._id.$oid;
+        $scope.transactionId = transaction._id;
 
         $scope.editMode = true;
       }

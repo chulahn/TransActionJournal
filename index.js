@@ -320,17 +320,23 @@ app.post("/login", function (req, res) {
   });
 });
 
+// ADD JWT.
 // Update a transaction.  Called when Updating, or resyncing.  User is same.
 app.post("/trans/:transId", function (req, res) {
   MongoClient.connect(databaseURL, function (err, client) {
     if (client) {
-      console.log("app.post('/update/:transId' : Connected to client");
+      console.log("app.post('/trans/:transId' : Connected to client:update");
 
-      var db = client.db("exercise-journal"); // change db name
-      var transactionCollection = db.collection("workouts"); // change collection name
+      var db = client.db("eyecoin"); // change db name
+      var transactionCollection = db.collection("demo"); // change collection name
+
+      // console.log(req.body);
+      // console.log(req.params.transId);
 
       var copy = req.body;
       delete copy._id;
+
+      // console.log(copy);
       var o_id = new ObjectId(req.params.transId);
 
       transactionCollection.update({ _id: o_id }, { $set: copy }, function (
@@ -338,7 +344,7 @@ app.post("/trans/:transId", function (req, res) {
         results
       ) {
         if (err) {
-          console.log("Edit Search workout error");
+          console.log("Edit Search transaction error");
           console.log(err);
           res.status(400).send(err);
         } else {
