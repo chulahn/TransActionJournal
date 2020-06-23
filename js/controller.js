@@ -14,23 +14,10 @@ app.controller("dataController", [
     $scope.transactions = [];
     $scope.cH = calcHelper;
 
-    //Get previous transactions if available.
-    var transactionLog = JSON.parse(localStorage.getItem("transactionLog"));
-
-    if (transactionLog && transactionLog.length > 0) {
-      console.log(
-        "Found data, Using localStorage transactionLog ",
-        transactionLog
-      );
-      $scope.transactions = transactionLog;
-    }
+    // Check if previous session.  Check TransactionLog? or check JWT Then update
 
     $scope.loginMode = true;
     $scope.loggedIn = false;
-
-    if (localStorage.getItem("jwt")) {
-      $scope.loggedIn = true;
-    }
 
     // Called after addItem, deletingItem, updateItem, or updatingItemTags.
     // Get transactions from database, and set as $scope data.
@@ -52,6 +39,9 @@ app.controller("dataController", [
           $scope.convertData();
           if (data) {
             $scope.loggedIn = true;
+          } else {
+            console.log("Denied ,", data);
+            $scope.loggedIn = false;
           }
 
           // Format for Calendar
