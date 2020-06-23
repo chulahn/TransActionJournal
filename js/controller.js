@@ -521,6 +521,7 @@ app.controller("dataController", [
 
         console.log("localStorage jwt set : ", localStorage.getItem("jwt"));
         $scope.$apply(function () {
+          $scope.getDBTransactions();
           console.log("apply");
         });
       });
